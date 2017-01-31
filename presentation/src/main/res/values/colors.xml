@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="brand_orange">#FF7900</color>
+    <color name="brand_orange_darker">#F16E00</color>
+    <color name="bot_color">#37AFD3</color>
+    <color name="bot_color_dark">#2A9FC8</color>
+    <color name="light_grey">#EEEEEE</color>
+    <color name="red">#CD3C14</color>
+
+</resources>

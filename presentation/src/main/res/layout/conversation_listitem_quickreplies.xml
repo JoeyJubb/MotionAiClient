@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
+
+    <data>
+
+        <variable
+            name="item"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplies" />
+
+        <variable
+            name="actionHandler"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter.QuickReplyAdapterCallback" />
+
+    </data>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/err_display_message"
+        app:layoutManager="LinearLayoutManager"
+        app:reverseLayout="true"
+        bind:adapterCallback="@{actionHandler}"
+        bind:quickReplies="@{item.list}" />
+
+</layout>

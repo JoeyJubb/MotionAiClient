@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
+
+    <data>
+
+        <variable
+            name="item"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.UserInputMessageModel" />
+
+        <variable
+            name="actionHandler"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|right"
+            android:layout_marginEnd="@dimen/chat_bubble_side_margin_small"
+            android:layout_marginLeft="@dimen/chat_bubble_side_margin_large"
+            android:layout_marginRight="@dimen/chat_bubble_side_margin_small"
+            android:layout_marginStart="@dimen/chat_bubble_side_margin_large"
+            android:background="@drawable/bg_chat_whole_flipped"
+            android:gravity="end"
+            android:text="@{item.text}"
+            tools:text="@string/lorem" />
+    </FrameLayout>
+
+</layout>

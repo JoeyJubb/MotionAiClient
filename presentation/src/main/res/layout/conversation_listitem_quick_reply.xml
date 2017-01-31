@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
+
+    <data>
+
+        <variable
+            name="item"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel" />
+
+        <variable
+            name="actionHandler"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+
+    </data>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:onClick="@{()-> actionHandler.onQuickReplyPress(item)}"
+        android:orientation="vertical"
+        android:text="@{item.textContent}" />
+
+
+</layout>

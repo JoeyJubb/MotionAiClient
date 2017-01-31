@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
+
+    <data>
+
+        <variable
+            name="item"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.BotResponseMessageModel" />
+
+        <variable
+            name="actionHandler"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/chat_bubble_side_margin_small"
+        android:layout_marginStart="@dimen/chat_bubble_side_margin_small"
+        android:layout_marginEnd="@dimen/chat_bubble_side_margin_large"
+        android:layout_marginRight="@dimen/chat_bubble_side_margin_large"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/err_display_message"
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_chat_whole"
+            android:text="@{item.target}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+
+    </LinearLayout>
+
+
+</layout>

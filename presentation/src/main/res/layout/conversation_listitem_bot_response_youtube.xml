@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
+
+    <data>
+
+        <variable
+            name="item"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.BotResponseMessageModel" />
+
+        <variable
+            name="actionHandler"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+
+    </data>
+
+    <LinearLayout
+        android:background="@drawable/bg_chat_whole"
+        android:orientation="vertical"
+        android:layout_marginEnd="@dimen/chat_bubble_side_margin_large"
+        android:layout_marginLeft="@dimen/chat_bubble_side_margin_small"
+        android:layout_marginStart="@dimen/chat_bubble_side_margin_small"
+        android:layout_marginRight="@dimen/chat_bubble_side_margin_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/youtube_video_support_not_yet_implemented"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:text="@string/view_online"
+            android:onClick="@{()-> actionHandler.onUrlClick(item.target)}"/>
+
+    </LinearLayout>
+
+
+
+</layout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Orange Bot</string>
+    <string name="title_activity_conversation">XTalent</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="err_send_message">There was an error sending your message</string>
+    <string name="err_display_message">Could not display the following correctly:</string>
+    <string name="hint_convo_input">Type a message</string>
+
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum sodales tellus, vitae facilisis mi aliquam dignissim. Mauris volutpat consectetur leo, id pharetra metus. Donec posuere nunc eget viverra tempor. Suspendisse eget posuere dui. Etiam mollis viverra nulla non varius. Cras eu posuere elit. Curabitur aliquet lacus non imperdiet lacinia. Sed malesuada felis vel sem luctus, at volutpat diam vestibulum. Vivamus laoreet ante congue mattis ornare. Nam nec porta dolor, eu consequat ante. Ut maximus nibh quis sagittis pellentesque. Nam mollis diam sed risus interdum, sit amet luctus elit consectetur. Suspendisse potenti. Integer ut mollis turpis, eget luctus elit. Nullam laoreet leo felis, ac consequat massa facilisis in. Maecenas efficitur, eros quis pretium imperdiet, ante dui posuere leo, eget fringilla diam arcu et nulla.</string>
+    <string name="action_restart">Restart</string>
+    <string name="action_clear">Clear chat</string>
+    <string name="youtube_video_support_not_yet_implemented">YouTube video support not yet implemented</string>
+    <string name="view_online">View Online</string>
+
+</resources>

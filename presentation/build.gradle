@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
+
+    defaultConfig {
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
+
+        applicationId globalConfiguration.getAt("androidApplicationId")
+        versionCode globalConfiguration.getAt("androidVersionCode")
+        versionName globalConfiguration.getAt("androidVersionName")
+        testInstrumentationRunner globalConfiguration.getAt("testInstrumentationRunner")
+        testApplicationId globalConfiguration.getAt("testApplicationId")
+
+
+    }
+    signingConfigs {
+        debug {
+            storeFile file('../buildsystem/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+}
+
+dependencies {
+    compile project(':domain')
+    compile project(':data')
+
+    def presentationDependencies = rootProject.ext.presentationDependencies
+    compile presentationDependencies.dagger
+    annotationProcessor presentationDependencies.daggerCompiler
+
+    compile presentationDependencies.butterKnife
+    compile presentationDependencies.rxJava
+    compile presentationDependencies.rxAndroid
+    provided presentationDependencies.javaxAnnotation
+
+    compile presentationDependencies.jodaTime
+    compile presentationDependencies.jodaMoney
+    compile presentationDependencies.glide
+    compile presentationDependencies.guava
+
+    compile presentationDependencies.appCompat
+    compile presentationDependencies.supportv4
+    compile presentationDependencies.recyclerView
+    compile presentationDependencies.cardView
+    compile presentationDependencies.design
+    compile presentationDependencies.gridLayout
+    compile presentationDependencies.preference
+    compile presentationDependencies.contraintLayout
+}

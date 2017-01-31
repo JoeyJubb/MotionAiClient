@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
+
+    <data>
+
+        <variable
+            name="item"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.BotResponseMessageModel" />
+
+        <variable
+            name="actionHandler"
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+
+    </data>
+
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="192dp"
+        android:layout_marginLeft="@dimen/chat_bubble_side_margin_small"
+        android:layout_marginStart="@dimen/chat_bubble_side_margin_small"
+        android:layout_marginEnd="@dimen/chat_bubble_side_margin_large"
+        android:layout_marginRight="@dimen/chat_bubble_side_margin_large"
+        android:adjustViewBounds="true"
+        app:imageUrl="@{item.target}" />
+
+</layout>

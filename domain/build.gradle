@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+
+dependencies {
+    def domainDependencies = rootProject.ext.domainDependencies
+
+    provided domainDependencies.javaxAnnotation
+
+    compile domainDependencies.javaxInject
+    compile domainDependencies.rxJava
+    compile presentationDependencies.jodaTime
+    compile presentationDependencies.jodaMoney
+    compile presentationDependencies.guava
+
+}
