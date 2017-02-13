@@ -1,76 +1,68 @@
+/*
+ * Copyright 2017 Bubblebear Apps Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.co.bubblebearapps.motionaiclient.mapper;
 
+import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
-import uk.co.bubblebearapps.motionaiclient.BotResponse;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.BotResponseMessageModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel;
+import uk.co.bubblebearapps.motionaiclient.Message;
+import uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel;
 import uk.co.bubblebearapps.motionaiclient.internal.di.PerActivity;
 
 /**
- * Created by joefr_000 on 23/01/2017.
+ * Created by joefr_000 on 02/02/2017.
  */
 @PerActivity
 public class MessageModelMapper {
 
-    private final CardModelMapper cardModelMapper;
-    private final QuickReplyModelMapper quickReplyModelMapper;
 
     @Inject
-    public MessageModelMapper(CardModelMapper cardModelMapper, QuickReplyModelMapper quickReplyModelMapper) {
-        this.cardModelMapper = cardModelMapper;
-        this.quickReplyModelMapper = quickReplyModelMapper;
-    }
-
-
-    public BotResponseBundle map(BotResponse botResponse, String localId) {
-        return new BotResponseBundle()
-                .setCards(cardModelMapper.map(botResponse.getCards()))
-                .setQuickReplies(quickReplyModelMapper.map(botResponse.getQuickReplies()))
-                .setBotResponse(new BotResponseMessageModel(localId, botResponse.getTimeStamp())
-                        .setTarget(botResponse.getTarget())
-                        .setSessionId(botResponse.getSessionId())
-                        .setType(botResponse.getType())
-
-                );
+    public MessageModelMapper() {
 
     }
 
-    public static class BotResponseBundle {
+    public List<MessageModel> map(List<Message> messages, DateTime timeStamp) {
 
-        private BotResponseMessageModel botResponse;
-        private List<CardModel> cards;
-        private List<QuickReplyModel> quickReplies;
-
-        public List<CardModel> getCards() {
-            return cards;
+        if (messages == null || messages.size() == 0) {
+            return Collections.emptyList();
         }
 
-        public BotResponseBundle setCards(List<CardModel> cards) {
-            this.cards = cards;
-            return this;
+        ArrayList<MessageModel> messageModels = new ArrayList<>(messages.size());
+
+        for (Message message : messages) {
+            messageModels.add(map(message, timeStamp));
         }
 
-        public List<QuickReplyModel> getQuickReplies() {
-            return quickReplies;
-        }
+        return messageModels;
 
-        public BotResponseBundle setQuickReplies(List<QuickReplyModel> quickReplies) {
-            this.quickReplies = quickReplies;
-            return this;
-        }
-
-        public BotResponseMessageModel getBotResponse() {
-            return botResponse;
-        }
-
-        public BotResponseBundle setBotResponse(BotResponseMessageModel botResponse) {
-            this.botResponse = botResponse;
-            return this;
-        }
     }
 
+    private MessageModel map(Message message, DateTime timeStamp) {
+        return new MessageModel()
+                .setTimeStamp(timeStamp)
+                .setLocalId(UUID.randomUUID().toString())
+                .setTarget(message.getPayload())
+                .setType(message.getType())
+                ;
+    }
 }

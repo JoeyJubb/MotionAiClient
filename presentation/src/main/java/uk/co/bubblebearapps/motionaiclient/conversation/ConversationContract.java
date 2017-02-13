@@ -1,4 +1,22 @@
+/*
+ * Copyright 2017 Bubblebear Apps Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.co.bubblebearapps.motionaiclient.conversation;
+
+import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import java.util.List;
 
@@ -6,10 +24,8 @@ import uk.co.bubblebearapps.motionaiclient.base.BasePresenter;
 import uk.co.bubblebearapps.motionaiclient.base.BaseView;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardButtonModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplies;
+import uk.co.bubblebearapps.motionaiclient.conversation.model.ConversationBubble;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter.QuickReplyAdapterCallback;
 
 /**
  * Created by joefr_000 on 23/01/2017.
@@ -21,9 +37,9 @@ public interface ConversationContract {
 
         void clearInput();
 
-        void setMessages(List<MessageModel> messageModelList);
+        void setMessages(List<ConversationBubble> conversationBubbleList);
 
-        void appendMessage(MessageModel message);
+        void appendMessage(ConversationBubble message);
 
         void setInputText(String inputText);
 
@@ -33,7 +49,11 @@ public interface ConversationContract {
 
         void openUrl(String url);
 
-        void removeMessage(MessageModel message);
+        void removeMessage(ConversationBubble message);
+
+        void setColorScheme(int colorPrimary);
+
+        void setTitle(String title);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -63,6 +83,9 @@ public interface ConversationContract {
 
         void onUrlClick(String url);
 
+        void onYouTubeThumbnailTapped(String youtubeId);
+
+        void loadYouTubeVideo(YouTubeThumbnailView youTubeThumbnailView, String youTubeId);
     }
 
 }

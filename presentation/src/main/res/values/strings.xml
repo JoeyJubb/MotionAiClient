@@ -1,18 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2017 Bubblebear Apps Ltd.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-    <string name="app_name">Orange Bot</string>
-    <string name="title_activity_conversation">XTalent</string>
-    <string name="action_settings">Settings</string>
+<resources>
 
     <string name="err_send_message">There was an error sending your message</string>
     <string name="err_display_message">Could not display the following correctly:</string>
     <string name="hint_convo_input">Type a message</string>
 
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum sodales tellus, vitae facilisis mi aliquam dignissim. Mauris volutpat consectetur leo, id pharetra metus. Donec posuere nunc eget viverra tempor. Suspendisse eget posuere dui. Etiam mollis viverra nulla non varius. Cras eu posuere elit. Curabitur aliquet lacus non imperdiet lacinia. Sed malesuada felis vel sem luctus, at volutpat diam vestibulum. Vivamus laoreet ante congue mattis ornare. Nam nec porta dolor, eu consequat ante. Ut maximus nibh quis sagittis pellentesque. Nam mollis diam sed risus interdum, sit amet luctus elit consectetur. Suspendisse potenti. Integer ut mollis turpis, eget luctus elit. Nullam laoreet leo felis, ac consequat massa facilisis in. Maecenas efficitur, eros quis pretium imperdiet, ante dui posuere leo, eget fringilla diam arcu et nulla.</string>
     <string name="action_restart">Restart</string>
     <string name="action_clear">Clear chat</string>
-    <string name="youtube_video_support_not_yet_implemented">YouTube video support not yet implemented</string>
-    <string name="view_online">View Online</string>
+
+    <string name="error_player">Cannot play video %s</string>
+    <string name="send">Send</string>
+    <string name="conversation_end">You have reached the end of the conversation with this botInfoModel.</string>
+
 
 </resources>

@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2017 Bubblebear Apps Ltd.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,9 +21,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+
         <variable
             name="item"
-            type="uk.co.bubblebearapps.motionaiclient.conversation.model.BotResponseMessageModel" />
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel" />
 
         <variable
             name="actionHandler"
@@ -16,35 +34,22 @@
 
     </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
         android:layout_marginEnd="@dimen/chat_bubble_side_margin_large"
         android:layout_marginLeft="@dimen/chat_bubble_side_margin_small"
         android:layout_marginRight="@dimen/chat_bubble_side_margin_large"
-        android:layout_marginStart="@dimen/chat_bubble_side_margin_small">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
-
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:theme="@style/ColoredBackground"
-            app:backgroundTint="?android:attr/windowBackground"
-            android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:background="@drawable/bg_chat_whole"
-            android:orientation="vertical"
-            app:htmlText="@{item.target}"
-            tools:text="@string/lorem" />
-
-    </LinearLayout>
+        android:layout_marginStart="@dimen/chat_bubble_side_margin_small"
+        android:autoLink="web"
+        android:orientation="vertical"
+        android:theme="@style/AppTheme.Dark"
+        app:backgroundTint="@{item.messageBackgroundColor}"
+        app:htmlText="@{item.target}"
+        app:juxtaposition="@{item.juxtaposition}"
+        tools:backgroundTint="#000"
+        tools:text="@string/lorem" />
 
 
 </layout>

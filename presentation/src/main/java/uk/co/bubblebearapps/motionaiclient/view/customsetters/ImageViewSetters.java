@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Bubblebear Apps Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.co.bubblebearapps.motionaiclient.view.customsetters;
 
 import android.databinding.BindingAdapter;
@@ -6,7 +22,6 @@ import android.databinding.BindingMethods;
 import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,12 +39,12 @@ import com.google.common.base.Strings;
 public class ImageViewSetters {
 
 
-    @BindingAdapter("imageUrl")
-    public static void setImageUrl(ImageView imageView, String url) {
+    @BindingAdapter(value = {"imageUrl", "cornerRadius"}, requireAll = false)
+    public static void setImageUrl(final ImageView imageView, String url, final float cornerRadius) {
 
         if (Strings.isNullOrEmpty(url)) {
-            imageView.setImageBitmap(null);}
-        else if(url.endsWith("gif")){
+            imageView.setImageBitmap(null);
+        } else if (url.endsWith("gif")) {
             Glide.with(
                     imageView.getContext())
                     .load(url)
@@ -37,10 +52,28 @@ public class ImageViewSetters {
                     .into(imageView);
 
         } else {
-            Glide.with(
-                    imageView.getContext())
-                    .load(url)
-                    .into(imageView);
+            if (cornerRadius > 0) {
+                Glide.with(
+                        imageView.getContext())
+                        .load(url)
+                        .asBitmap()
+                        .into(new BitmapImageViewTarget(imageView) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable circularBitmapDrawable =
+                                        RoundedBitmapDrawableFactory.create(imageView.getContext().getResources(), resource);
+                                circularBitmapDrawable.setCornerRadius(cornerRadius);
+                                imageView.setImageDrawable(circularBitmapDrawable);
+                            }
+                        });
+
+            } else {
+
+                Glide.with(
+                        imageView.getContext())
+                        .load(url)
+                        .into(imageView);
+            }
         }
     }
 

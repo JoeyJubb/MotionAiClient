@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Bubblebear Apps Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 allprojects {
     repositories {
         jcenter()
@@ -19,11 +35,10 @@ ext {
     rxAndroidVersion = '1.0.1'
     javaxAnnotationVersion = '1.0'
     javaxInjectVersion = '1'
-    gsonVersion = '2.3'
-    okHttpVersion = '2.5.0'
+    gsonVersion = '2.4.3'
+    okHttpVersion = '3.6.0'
     androidAnnotationsVersion = '21.0.3'
     jodaTimeVersion = '2.3'
-    jodaMoneyVersion = '0.11'
     glideVersion = '3.7.0'
     guavaVersion = '18.0'
     retrofitVersion = '2.1.0'
@@ -36,7 +51,7 @@ ext {
     dexmakerVersion = '1.0'
     espressoVersion = '2.0'
     testingSupportLibVersion = '0.1'
-    contraintLayoutVersion = '1.0.0-beta4'
+    contraintLayoutVersion = '1.0.0-beta5'
 
     //Development
     leakCanaryVersion = '1.3.1'
@@ -51,7 +66,6 @@ ext {
             rxAndroid      : "io.reactivex:rxandroid:${rxAndroidVersion}",
             javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             jodaTime       : "joda-time:joda-time:${jodaTimeVersion}",
-            jodaMoney      : "org.joda:joda-money:${jodaMoneyVersion}",
             glide          : "com.github.bumptech.glide:glide:${glideVersion}",
             guava          : "com.google.guava:guava:${guavaVersion}",
             recyclerView   : "com.android.support:recyclerview-v7:${supportLibraryVersion}",
@@ -59,7 +73,7 @@ ext {
             design         : "com.android.support:design:${supportLibraryVersion}",
             gridLayout     : "com.android.support:gridlayout-v7:${supportLibraryVersion}",
             preference     : "com.android.support:preference-v7:${supportLibraryVersion}",
-            contraintLayout: "com.android.support.constraint:constraint-layout:${contraintLayoutVersion}",
+            contraintLayout: "com.android.support.constraint:constraint-layout:${contraintLayoutVersion}"
     ]
 
     presentationTestDependencies = [
@@ -75,8 +89,7 @@ ext {
             javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             javaxInject    : "javax.inject:javax.inject:${javaxInjectVersion}",
             rxJava         : "io.reactivex:rxjava:${rxJavaVersion}",
-            jodaTime       : "joda-time:joda-time:${jodaTimeVersion}",
-            jodaMoney      : "org.joda:joda-money:${jodaMoneyVersion}",
+            jodaTime       : "joda-time:joda-time:${jodaTimeVersion}"
     ]
 
     domainTestDependencies = [
@@ -87,7 +100,7 @@ ext {
     dataDependencies = [
             daggerCompiler    : "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger            : "com.google.dagger:dagger:${daggerVersion}",
-            okHttp            : "com.squareup.okhttp:okhttp:${okHttpVersion}",
+            okHttp            : "com.squareup.okhttp3:okhttp:${okHttpVersion}",
             gson              : "com.google.code.gson:gson:${gsonVersion}",
             rxJava            : "io.reactivex:rxjava:${rxJavaVersion}",
             rxAndroid         : "io.reactivex:rxandroid:${rxAndroidVersion}",

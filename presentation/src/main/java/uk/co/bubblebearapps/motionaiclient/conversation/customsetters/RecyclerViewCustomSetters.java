@@ -1,22 +1,26 @@
+/*
+ * Copyright 2017 Bubblebear Apps Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.co.bubblebearapps.motionaiclient.conversation.customsetters;
 
 import android.databinding.BindingAdapter;
-import android.databinding.BindingMethod;
-import android.databinding.BindingMethods;
-import android.graphics.Bitmap;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.google.common.base.Strings;
 
 import java.util.List;
 
-import uk.co.bubblebearapps.motionaiclient.Card;
-import uk.co.bubblebearapps.motionaiclient.QuickReply;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter.CardsAdapterCallback;
@@ -28,22 +32,21 @@ import uk.co.bubblebearapps.motionaiclient.view.DataBindingAdapter;
  */
 public class RecyclerViewCustomSetters {
 
-    private RecyclerViewCustomSetters(){}
+    private RecyclerViewCustomSetters() {
+    }
 
-
-    @BindingAdapter(value={"cards", "adapterCallback"})
+    @BindingAdapter(value = {"cards", "adapterCallback"})
     public static void setupCardsRecycler(RecyclerView recyclerView, List<CardModel> itemList, CardsAdapterCallback adapterCallback) {
         DataBindingAdapter<CardModel> adapter = new DataBindingAdapter<>(adapterCallback);
         adapter.setItemList(itemList);
         recyclerView.setAdapter(adapter);
-
     }
-    @BindingAdapter(value={"quickReplies", "adapterCallback"})
+
+    @BindingAdapter(value = {"quickReplies", "adapterCallback"})
     public static void setupQuikcRepliesRecycler(RecyclerView recyclerView, List<QuickReplyModel> itemList, QuickReplyAdapterCallback adapterCallback) {
         DataBindingAdapter<QuickReplyModel> adapter = new DataBindingAdapter<>(adapterCallback);
         adapter.setItemList(itemList);
         recyclerView.setAdapter(adapter);
-
     }
 
 }

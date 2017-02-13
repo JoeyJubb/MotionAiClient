@@ -1,23 +1,37 @@
-package uk.co.bubblebearapps.motionaiclient.mapper;
+/*
+ * Copyright 2017 Bubblebear Apps Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import android.text.TextUtils;
-import android.util.Log;
+package uk.co.bubblebearapps.motionaiclient.mapper;
 
 import com.google.common.base.Strings;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import rx.Observable;
 import uk.co.bubblebearapps.motionaiclient.BotResponse;
+import uk.co.bubblebearapps.motionaiclient.Message;
 import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
+import uk.co.bubblebearapps.motionaiclient.exception.EndOfConversationException;
+import uk.co.bubblebearapps.motionaiclient.util.StringUtils;
 
 /**
  * Created by joefr_000 on 23/01/2017.
@@ -26,8 +40,10 @@ import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
 @Singleton
 public class ResponseEntityMapper {
 
-    private static final Pattern IMG_TAG_PATTERN = Pattern.compile("\\[(img|video|youtube)\\]([\\s\\S]+?)\\[\\/\\1\\]");
-    private static final String BB_CODE_REMOVER_REGEX = "(\\[\\/?(img|video|youtube)])";
+    private static final String IMG_TAG_REGEX = "\\[(img|video|youtube)\\]([\\s\\S]+?)\\[/\\1\\]";
+    private static final String BB_CODE_REMOVER_REGEX = "(\\[/?(img|video|youtube)])";
+    private static final String BREAK_PATTERN_REGEX = "(::next(-[0-9]+)?::)";
+
 
     private static final String TAG = "ResponseEntityMapper";
 
@@ -41,101 +57,57 @@ public class ResponseEntityMapper {
         this.quickReplyEntityMapper = quickReplyEntityMapper;
     }
 
-    public List<BotResponse> map(ResponseEntity responseEntity) {
+    public Observable<BotResponse> map(ResponseEntity responseEntity) {
 
-        final String responseText = responseEntity.getBotResponse();
+        if (responseEntity.getResponseCode() == 300) {
+            return Observable.error(new EndOfConversationException());
+        } else if (responseEntity.getResponseCode() == 200) {
 
-        if (TextUtils.isEmpty(responseText)) {
-            return Collections.emptyList();
-        } else {
-            List<String> splitResponses = split(responseText, IMG_TAG_PATTERN);
-            ArrayList<BotResponse> botResponseList = new ArrayList<>();
+            List<String> sectionList = StringUtils.splitButKeep(responseEntity.getBotResponse(), IMG_TAG_REGEX);
 
-            for (String response : splitResponses) {
+            ArrayList<Message> botResponseList = new ArrayList<>();
+            for (String section : sectionList) {
 
-                BotResponse.Type type;
+                String[] paragraphList = section.split(BREAK_PATTERN_REGEX);
 
-                if (response.startsWith("[img]")) {
-                    type = BotResponse.Type.IMAGE;
-                } else if (response.startsWith("[video]")) {
-                    type = BotResponse.Type.VIDEO;
-                } else if (response.startsWith("[youtube]")) {
-                    type = BotResponse.Type.YOUTUBE;
-                } else {
-                    type = BotResponse.Type.TEXT;
+                for (String paragraph : paragraphList) {
+
+                    String target = paragraph.replaceAll(BB_CODE_REMOVER_REGEX, "").trim();
+                    if (Strings.isNullOrEmpty(target)) {
+                        continue;
+                    }
+
+                    Message message = new Message().setPayload(target);
+
+                    if (paragraph.startsWith("[img]")) {
+                        message.setType(Message.Type.IMAGE);
+                    } else if (paragraph.startsWith("[video]")) {
+                        message.setType(Message.Type.VIDEO);
+                    } else if (paragraph.startsWith("[youtube]")) {
+                        message.setType(Message.Type.YOUTUBE);
+                    } else {
+                        message.setType(Message.Type.TEXT);
+                    }
+
+                    botResponseList.add(message);
+
                 }
-
-                String target = response.replaceAll(BB_CODE_REMOVER_REGEX, "").trim();
-
-                if (Strings.isNullOrEmpty(target)) {
-                    continue;
-                }
-
-                botResponseList.add(new BotResponse()
-                        .setTimeStamp(DateTime.now())
-                        .setSessionId(responseEntity.getSession())
-                        .setType(type)
-                        .setTarget(target)
-                );
-
             }
 
-            // add cards and replies to last one
-            if (botResponseList.size() == 0) {
 
-                botResponseList.add(
-                        new BotResponse()
-                                .setTimeStamp(DateTime.now())
-                                .setSessionId(responseEntity.getSession())
-                                .setType(BotResponse.Type.UNKNOWN)
-                                .setTarget(responseEntity.getBotResponse())
-                );
-            }
-
-            botResponseList.get(botResponseList.size() - 1)
+            return Observable.just(new BotResponse()
                     .setQuickReplies(quickReplyEntityMapper.map(responseEntity.getQuickReplies()))
-                    .setCards(cardEntityMapper.map(responseEntity.getCards()));
+                    .setCards(cardEntityMapper.map(responseEntity.getCards()))
+                    .setMessages(botResponseList)
+                    .setSessionId(responseEntity.getSession())
+                    .setTimeStamp(DateTime.now()));
 
 
-            return botResponseList;
-
-
+        } else {
+            return Observable.error(new UnknownError());
         }
 
     }
 
-    // recursive -- the first patten finds whatever it can then hands off to the next pattern on the list when it comes across an unknown bit
-    private List<String> split(String responseText, Pattern pattern) {
-
-
-        Matcher matcher = pattern.matcher(responseText);
-
-        ArrayList<String> result = new ArrayList<>();
-
-        int trailingIndex = 0;
-        while (matcher.find()) {
-            if (matcher.start() > trailingIndex) {
-                //found plain text
-                String substring = responseText.substring(trailingIndex, matcher.start()-1);
-                result.add(substring);
-
-            }
-            // found match
-            String match = responseText.substring(matcher.start(), matcher.end());
-            result.add(match);
-
-            trailingIndex = matcher.end();
-        }
-
-        if (trailingIndex < responseText.length() - 1) {
-            // found plain text
-            String substring = responseText.substring(trailingIndex, responseText.length());
-            result.add(substring);
-        }
-
-        return result;
-
-
-    }
 
 }
