@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
+
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.BubblebearAppsLtd'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -32,6 +36,13 @@ android {
         testApplicationId globalConfiguration.getAt("testApplicationId")
 
     }
+
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+
     signingConfigs {
         debug {
             storeFile file('../buildsystem/debug.keystore')
@@ -55,10 +66,6 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
@@ -89,3 +96,4 @@ dependencies {
     compile presentationDependencies.preference
     compile presentationDependencies.contraintLayout
 }
+
