@@ -15,6 +15,7 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="uk.co.bubblebearapps.motionaiclient.conversation.ConversationDisplayFragment">
 
@@ -45,7 +46,7 @@
             android:background="@drawable/bg_chat_only"
             android:gravity="end"
             android:text="@{item.text}"
-            tools:text="@string/lorem" />
+            app:backgroundTint="@{@android:color/white}" />
     </FrameLayout>
 
 </layout>

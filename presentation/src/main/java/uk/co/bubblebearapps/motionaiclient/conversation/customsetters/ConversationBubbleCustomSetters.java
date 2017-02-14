@@ -21,6 +21,7 @@ import android.view.View;
 
 import uk.co.bubblebearapps.motionaiclient.R;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel;
+import uk.co.bubblebearapps.motionaiclient.view.customsetters.ViewCustomSetters;
 
 /**
  * Created by joefr_000 on 09/02/2017.
@@ -32,8 +33,8 @@ public class ConversationBubbleCustomSetters {
     }
 
 
-    @BindingAdapter("juxtaposition")
-    public static void setBackgroundTint(final View view, MessageModel.Juxtaposition juxtaposition) {
+    @BindingAdapter({"bubbleJuxtaposition", "bubbleColor"})
+    public static void bindBubble(final View view, MessageModel.Juxtaposition juxtaposition, int backgroundColor) {
 
 
         switch (juxtaposition) {
@@ -50,6 +51,8 @@ public class ConversationBubbleCustomSetters {
                 view.setBackgroundResource(R.drawable.bg_chat_only);
                 break;
         }
+
+        ViewCustomSetters.setBackgroundTint(view, backgroundColor);
 
     }
 

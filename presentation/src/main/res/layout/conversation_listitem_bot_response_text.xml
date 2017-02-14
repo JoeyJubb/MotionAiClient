@@ -45,9 +45,9 @@
         android:autoLink="web"
         android:orientation="vertical"
         android:theme="@style/AppTheme.Dark"
-        app:backgroundTint="@{item.messageBackgroundColor}"
+        app:bubbleColor="@{item.messageBackgroundColor}"
+        app:bubbleJuxtaposition="@{item.juxtaposition}"
         app:htmlText="@{item.target}"
-        app:juxtaposition="@{item.juxtaposition}"
         tools:backgroundTint="#000" />
 
 
