@@ -48,8 +48,7 @@
         app:backgroundTint="@{item.messageBackgroundColor}"
         app:htmlText="@{item.target}"
         app:juxtaposition="@{item.juxtaposition}"
-        tools:backgroundTint="#000"
-        tools:text="@string/lorem" />
+        tools:backgroundTint="#000" />
 
 
 </layout>

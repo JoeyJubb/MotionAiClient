@@ -33,6 +33,7 @@ public class ViewCustomSetters {
     @BindingAdapter("backgroundTint")
     public static void setBackgroundTint(final View view, int tint) {
 
+
         Drawable wrapped = DrawableCompat.wrap(view.getBackground());
         DrawableCompat.setTint(wrapped, tint);
 
@@ -41,6 +42,7 @@ public class ViewCustomSetters {
         } else {
             view.setBackgroundDrawable(wrapped);
         }
+
 
     }
 }
