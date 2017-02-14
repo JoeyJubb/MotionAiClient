@@ -53,6 +53,7 @@ public class ChooseBotActivity extends AppCompatActivity {
 
         // set initial values
         mViewDataBinding.textApiKey.setText(chooseBotModel.getApiKey());
+        mViewDataBinding.textYoutubeKey.setText(chooseBotModel.getYouTubeKey());
         mViewDataBinding.textId.setText(chooseBotModel.getId());
         mViewDataBinding.textBotName.setText(chooseBotModel.getName());
         mViewDataBinding.textBotColor.setText(chooseBotModel.getColor());
@@ -103,6 +104,9 @@ public class ChooseBotActivity extends AppCompatActivity {
         if (Strings.isNullOrEmpty(chooseBotModel.getName())) {
             allOK = false;
         }
+        if (Strings.isNullOrEmpty(chooseBotModel.getYouTubeKey())) {
+            allOK = false;
+        }
 
         return allOK;
     }
@@ -125,7 +129,7 @@ public class ChooseBotActivity extends AppCompatActivity {
                 chooseBotModel.getName(),
                 Color.parseColor(chooseBotModel.getColor()));
 
-        startActivity(MainActivity.getCallingIntent(this, botInfo));
+        startActivity(MainActivity.getCallingIntent(this, chooseBotModel.getYouTubeKey(), botInfo));
         finish();
 
     }

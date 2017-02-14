@@ -29,6 +29,7 @@ import android.util.Log;
 public class ChooseBotModel extends BaseObservable {
 
     private static final String PREF_API = "uk.co.bubblebearapps.samplebot.PREF_API";
+    private static final String PREF_YOUTUBE = "uk.co.bubblebearapps.samplebot.PREF_YOUTUBE";
     private static final String PREF_ID = "uk.co.bubblebearapps.samplebot.PREF_ID";
     private static final String PREF_COLOR = "uk.co.bubblebearapps.samplebot.PREF_COLOR";
     private static final String PREF_NAME = "uk.co.bubblebearapps.samplebot.PREF_NAME";
@@ -42,6 +43,7 @@ public class ChooseBotModel extends BaseObservable {
     private String id;
     private String color;
     private String name;
+    private String youTubeKey;
 
     private boolean remember;
 
@@ -52,6 +54,7 @@ public class ChooseBotModel extends BaseObservable {
 
             remember = true;
             apiKey = sharedPreferences.getString(PREF_API, "");
+            youTubeKey = sharedPreferences.getString(PREF_YOUTUBE, "");
             id = sharedPreferences.getString(PREF_ID, "");
             color = sharedPreferences.getString(PREF_COLOR, "");
             name = sharedPreferences.getString(PREF_NAME, "");
@@ -66,6 +69,11 @@ public class ChooseBotModel extends BaseObservable {
                     case BR.apiKey:
                         if (remember) {
                             savePreference(PREF_API, apiKey);
+                        }
+                        break;
+                    case BR.youTubeKey:
+                        if (remember) {
+                            savePreference(PREF_YOUTUBE, youTubeKey);
                         }
                         break;
                     case BR.id:
@@ -138,6 +146,17 @@ public class ChooseBotModel extends BaseObservable {
         notifyPropertyChanged(BR.apiKey);
     }
 
+
+    @Bindable
+    public String getYouTubeKey() {
+        return youTubeKey;
+    }
+
+    public void setYouTubeKey(String youTubeKey) {
+        this.youTubeKey = youTubeKey;
+        notifyPropertyChanged(BR.youTubeKey);
+    }
+
     @Bindable
     public String getId() {
         return id;
@@ -178,4 +197,5 @@ public class ChooseBotModel extends BaseObservable {
         this.remember = remember;
         notifyPropertyChanged(BR.remember);
     }
+
 }

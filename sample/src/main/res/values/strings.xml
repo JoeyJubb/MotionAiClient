@@ -25,4 +25,5 @@
     <string name="remember_info">Remember for next time</string>
     <string name="talk_to_bot">Talk to bot</string>
     <string name="color_error">Color must be valid hex</string>
+    <string name="prompt_youtube_key">YouTube API key</string>
 </resources>

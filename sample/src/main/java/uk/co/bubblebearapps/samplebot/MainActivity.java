@@ -36,11 +36,13 @@ public class MainActivity extends AppCompatActivity implements ConversationDispl
 
     private static final String TAG_CONVO = "uk.co.bubblebearapps.motionaiclient.TAG_CONVO";
     private static final String EXTRA_BOT_INFO = "uk.co.bubblebearapps.motionaiclient.EXTRA_BOT_INFO";
+    private static final String EXTRA_YOUTUBE_KEY = "uk.co.bubblebearapps.motionaiclient.EXTRA_YOUTUBE_KEY";
 
-    public static Intent getCallingIntent(Context context, BotInfoModel botInfo) {
+    public static Intent getCallingIntent(Context context, String youtubeKey, BotInfoModel botInfo) {
 
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(EXTRA_BOT_INFO, botInfo);
+        intent.putExtra(EXTRA_YOUTUBE_KEY, youtubeKey);
         return intent;
 
     }
@@ -57,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements ConversationDispl
             UserInfoModel userInfo = new UserInfoModel(UUID.randomUUID().toString(), "John Doe");// create some random userInfo credentials for now
 
             BotInfoModel botInfo = getIntent().getParcelableExtra(EXTRA_BOT_INFO);
-            ConversationDisplayFragment conversationDisplayFragment = ConversationDisplayFragment.newInstance(BuildConfig.YOUTUBE_API_KEY, userInfo, botInfo);
+            String youTubeKey = getIntent().getStringExtra(EXTRA_YOUTUBE_KEY);
+
+            ConversationDisplayFragment conversationDisplayFragment = ConversationDisplayFragment.newInstance(youTubeKey, userInfo, botInfo);
 
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationDisplayFragment, TAG_CONVO).commitNow();
         }
