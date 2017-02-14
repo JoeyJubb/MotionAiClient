@@ -2,6 +2,8 @@
 
 This app allows you to interact with [motion.ai](https://www.motion.ai/) bots that I've created.
 
+[![](https://jitpack.io/v/BubblebearAppsLtd/MotionAiClient.svg)](https://jitpack.io/#BubblebearAppsLtd/MotionAiClient)
+
 # Change Log
 All notable changes to this project will be documented in this file.
 
