@@ -32,12 +32,6 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "MOTION_API_KEY", MOTION_API_KEY)
-        buildConfigField("String", "YOUTUBE_API_KEY", YOUTUBE_API_KEY)
-        buildConfigField("String", "BOT_ID", BOT_ID)
-        buildConfigField("String", "BOT_NAME", BOT_NAME)
-        buildConfigField("String", "BOT_COLOR", BOT_COLOR)
-
 
     }
     buildTypes {
@@ -57,7 +51,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    testCompile 'junit:junit:4.12'
     compile project(':presentation')
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
+    testCompile 'junit:junit:4.12'
 }

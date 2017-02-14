@@ -14,4 +14,21 @@
  * limitations under the License.
  */
 
-include ':presentation', ':domain', ':data', ':sample'
+package uk.co.bubblebearapps.samplebot;
+
+/**
+ * Created by joefr_000 on 14/02/2017.
+ */
+
+public interface ChooseBotActionHandler {
+
+
+    void setApiKey(String apiKey);
+
+    void setBotId(String id);
+
+    void setBotColor(String color);
+
+    void setBotName(String name);
+
+}

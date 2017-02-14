@@ -14,4 +14,25 @@
  * limitations under the License.
  */
 
-include ':presentation', ':domain', ':data', ':sample'
+package uk.co.bubblebearapps.samplebot;
+
+import android.databinding.BindingAdapter;
+import android.support.design.widget.TextInputLayout;
+
+/**
+ * Created by joefr_000 on 14/02/2017.
+ */
+
+public class CustomSetters {
+
+    private CustomSetters() {
+    }
+
+    @BindingAdapter("error")
+    public static void setError(TextInputLayout textInputLayout, String error) {
+
+        textInputLayout.setError(error);
+
+    }
+
+}

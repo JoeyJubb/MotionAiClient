@@ -16,4 +16,13 @@
 
 <resources>
     <string name="app_name">SampleBot</string>
+    <string name="title_activity_choose_bot">Choose Bot</string>
+
+    <string name="prompt_bot_name">Name</string>
+    <string name="prompt_bot_color">Color</string>
+    <string name="bot_id">Bot ID</string>
+    <string name="prompt_api_key">Api Key</string>
+    <string name="remember_info">Remember for next time</string>
+    <string name="talk_to_bot">Talk to bot</string>
+    <string name="color_error">Color must be valid hex</string>
 </resources>

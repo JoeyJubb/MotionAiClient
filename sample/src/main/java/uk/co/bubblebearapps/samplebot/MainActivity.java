@@ -16,6 +16,8 @@
 
 package uk.co.bubblebearapps.samplebot;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -33,6 +35,15 @@ import uk.co.bubblebearapps.motionaiclient.model.UserInfoModel;
 public class MainActivity extends AppCompatActivity implements ConversationDisplayFragment.Callback {
 
     private static final String TAG_CONVO = "uk.co.bubblebearapps.motionaiclient.TAG_CONVO";
+    private static final String EXTRA_BOT_INFO = "uk.co.bubblebearapps.motionaiclient.EXTRA_BOT_INFO";
+
+    public static Intent getCallingIntent(Context context, BotInfoModel botInfo) {
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(EXTRA_BOT_INFO, botInfo);
+        return intent;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements ConversationDispl
         if (savedInstanceState == null) {
 
             UserInfoModel userInfo = new UserInfoModel(UUID.randomUUID().toString(), "John Doe");// create some random userInfo credentials for now
-            BotInfoModel botInfo = new BotInfoModel(BuildConfig.MOTION_API_KEY, BuildConfig.BOT_ID, BuildConfig.BOT_NAME, Color.parseColor(BuildConfig.BOT_COLOR));
 
+            BotInfoModel botInfo = getIntent().getParcelableExtra(EXTRA_BOT_INFO);
             ConversationDisplayFragment conversationDisplayFragment = ConversationDisplayFragment.newInstance(BuildConfig.YOUTUBE_API_KEY, userInfo, botInfo);
 
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationDisplayFragment, TAG_CONVO).commitNow();
