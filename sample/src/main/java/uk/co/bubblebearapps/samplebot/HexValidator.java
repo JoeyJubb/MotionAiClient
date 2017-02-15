@@ -26,7 +26,6 @@ public class HexValidator {
 
     private static final String HEX_PATTERN = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
     private static Pattern pattern;
-    private static Matcher matcher;
 
     static {
         pattern = Pattern.compile(HEX_PATTERN);
@@ -47,7 +46,7 @@ public class HexValidator {
             return false;
         }
 
-        matcher = pattern.matcher(hex);
+        Matcher matcher = pattern.matcher(hex);
         return matcher.matches();
 
     }

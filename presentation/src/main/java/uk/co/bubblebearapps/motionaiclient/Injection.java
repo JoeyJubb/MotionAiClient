@@ -16,7 +16,7 @@
 
 package uk.co.bubblebearapps.motionaiclient;
 
-import android.app.Application;
+import android.content.Context;
 
 import uk.co.bubblebearapps.motionaiclient.internal.di.components.ApplicationComponent;
 import uk.co.bubblebearapps.motionaiclient.internal.di.components.DaggerApplicationComponent;
@@ -26,24 +26,25 @@ import uk.co.bubblebearapps.motionaiclient.internal.di.modules.ApplicationModule
 /**
  * Android Main Application
  */
-public class AndroidApplication extends Application {
+public class Injection {
 
-    private ApplicationComponent applicationComponent;
+    private static ApplicationComponent applicationComponent;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        this.initializeInjector();
+    private Injection() {
     }
 
-    private void initializeInjector() {
-        this.applicationComponent = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
+    public static void initializeInjector(Context context) {
+        applicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(context.getApplicationContext()))
                 .build();
     }
 
-    public ApplicationComponent getApplicationComponent() {
-        return this.applicationComponent;
+    public static ApplicationComponent getApplicationComponent() {
+        if (applicationComponent == null) {
+            throw new IllegalStateException("Please call Injection.initializeInjector(Context context) from the onCreate method in your Application class");
+        }
+
+        return applicationComponent;
     }
 
 

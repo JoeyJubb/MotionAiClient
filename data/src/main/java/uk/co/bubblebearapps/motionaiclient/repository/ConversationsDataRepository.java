@@ -18,12 +18,15 @@ package uk.co.bubblebearapps.motionaiclient.repository;
 
 import com.google.common.util.concurrent.RateLimiter;
 
+import java.util.concurrent.TimeUnit;
+
 import rx.Observable;
 import rx.functions.Func1;
 import uk.co.bubblebearapps.motionaiclient.BotResponse;
 import uk.co.bubblebearapps.motionaiclient.UserInfo;
 import uk.co.bubblebearapps.motionaiclient.datasource.BotDataSource;
 import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
+import uk.co.bubblebearapps.motionaiclient.mapper.DelayedResponse;
 import uk.co.bubblebearapps.motionaiclient.mapper.ResponseEntityMapper;
 
 /**
@@ -31,6 +34,8 @@ import uk.co.bubblebearapps.motionaiclient.mapper.ResponseEntityMapper;
  */
 
 public class ConversationsDataRepository implements ConversationsRepository {
+
+    private static final String TAG = "ConvoRepo";
 
     private final BotDataSource moviesDataSource;
     private final ResponseEntityMapper entityMapper;
@@ -50,8 +55,13 @@ public class ConversationsDataRepository implements ConversationsRepository {
                 .flatMap(new Func1<ResponseEntity, Observable<BotResponse>>() {
                     @Override
                     public Observable<BotResponse> call(ResponseEntity responseEntity) {
+                        Observable<BotResponse> responseObservable = entityMapper.map(responseEntity).flatMap(new Func1<DelayedResponse, Observable<BotResponse>>() {
+                            @Override
+                            public Observable<BotResponse> call(DelayedResponse delayedResponse) {
+                                return Observable.just(delayedResponse.getBotResponse()).delay(delayedResponse.getDelay(), TimeUnit.MILLISECONDS);
+                            }
+                        });
 
-                        Observable<BotResponse> responseObservable = entityMapper.map(responseEntity);
 
                         if (responseEntity.isAutoReply()) {
                             return responseObservable.concatWith(

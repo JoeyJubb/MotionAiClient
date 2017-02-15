@@ -16,8 +16,9 @@
 
 package uk.co.bubblebearapps.motionaiclient.mapper;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,8 +26,10 @@ import javax.inject.Singleton;
 
 import uk.co.bubblebearapps.motionaiclient.Card;
 import uk.co.bubblebearapps.motionaiclient.CardButton;
+import uk.co.bubblebearapps.motionaiclient.CardList;
 import uk.co.bubblebearapps.motionaiclient.entity.CardEntity;
 import uk.co.bubblebearapps.motionaiclient.entity.CardEntityButton;
+import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
 
 /**
  * Created by joefr_000 on 23/01/2017.
@@ -65,15 +68,15 @@ public class CardEntityMapper {
         return card;
     }
 
-    public List<Card> map(CardEntity[] cards) {
-        if(cards == null){
-            return Collections.emptyList();
+    public CardList map(ResponseEntity responseEntity) {
+        if (responseEntity == null || responseEntity.getCards() == null || responseEntity.getCards().length == 0) {
+            return null;
         }
         List<Card> cardsList = new ArrayList<>();
-        for(CardEntity cardEntity : cards){
+        for (CardEntity cardEntity : responseEntity.getCards()) {
             cardsList.add(map(cardEntity));
         }
-        return cardsList;
+        return new CardList(responseEntity.getSession(), DateTime.now(), cardsList);
 
     }
 }

@@ -91,7 +91,7 @@ public abstract class BaseMvpYouTubeFragment<P extends BasePresenter<V>, V exten
     protected abstract V getPresenterView();
 
     /**
-     * Use this method in case you want to specify a spefic ID for the {@link PresenterLoader}.
+     * Use this method in case you want to specify a specific ID for the {@link PresenterLoader}.
      * By default its value would be {@link #LOADER_ID}.
      */
     protected int loaderId() {

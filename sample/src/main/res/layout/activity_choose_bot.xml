@@ -62,8 +62,7 @@
                     android:afterTextChanged="@{(s)-> model.setApiKey(s.toString())}"
                     android:hint="@string/prompt_api_key"
                     android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -79,8 +78,7 @@
                     android:afterTextChanged="@{(s)-> model.setYouTubeKey(s.toString())}"
                     android:hint="@string/prompt_youtube_key"
                     android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -96,8 +94,7 @@
                     android:afterTextChanged="@{(s)-> model.setBotId(s.toString())}"
                     android:hint="@string/bot_id"
                     android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -113,8 +110,7 @@
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(s)-> model.setBotColor(s.toString())}"
                     android:hint="@string/prompt_bot_color"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -129,8 +125,7 @@
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(s)-> model.setBotName(s.toString())}"
                     android:hint="@string/prompt_bot_name"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 

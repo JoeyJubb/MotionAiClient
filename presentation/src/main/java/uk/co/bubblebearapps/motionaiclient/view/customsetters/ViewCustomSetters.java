@@ -18,8 +18,8 @@ package uk.co.bubblebearapps.motionaiclient.view.customsetters;
 
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 /**
@@ -39,11 +39,6 @@ public class ViewCustomSetters {
 
         Drawable wrapped = DrawableCompat.wrap(view.getBackground());
         DrawableCompat.setTint(wrapped, tint);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(wrapped);
-        } else {
-            view.setBackgroundDrawable(wrapped);
-        }
+        ViewCompat.setBackground(view, wrapped);
     }
 }

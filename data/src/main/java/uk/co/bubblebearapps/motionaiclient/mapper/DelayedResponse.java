@@ -14,31 +14,28 @@
  * limitations under the License.
  */
 
-package uk.co.bubblebearapps.motionaiclient.internal.di.modules;
+package uk.co.bubblebearapps.motionaiclient.mapper;
 
-import android.content.Context;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
+import uk.co.bubblebearapps.motionaiclient.BotResponse;
 
 /**
- * Dagger module that provides objects which will live during the context lifecycle.
+ * Created by joefr_000 on 15/02/2017.
  */
-@Module
-public class ApplicationModule {
 
-    private final Context context;
+public class DelayedResponse {
+    private final long delay;
+    private final BotResponse botResponse;
 
-    public ApplicationModule(Context context) {
-        this.context = context;
+    public DelayedResponse(BotResponse botResponse, long delay) {
+        this.delay = delay;
+        this.botResponse = botResponse;
     }
 
-    @Provides
-    @Singleton
-    Context provideApplicationContext() {
-        return this.context;
+    public long getDelay() {
+        return delay;
     }
 
+    public BotResponse getBotResponse() {
+        return botResponse;
+    }
 }

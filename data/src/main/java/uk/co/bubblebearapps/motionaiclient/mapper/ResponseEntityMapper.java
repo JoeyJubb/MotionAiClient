@@ -16,12 +16,17 @@
 
 package uk.co.bubblebearapps.motionaiclient.mapper;
 
+import android.support.annotation.Nullable;
+import android.util.Log;
+
 import com.google.common.base.Strings;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -44,8 +49,16 @@ public class ResponseEntityMapper {
     private static final String BB_CODE_REMOVER_REGEX = "(\\[/?(img|video|youtube)])";
     private static final String BREAK_PATTERN_REGEX = "(::next(-[0-9]+)?::)";
 
+    private static final String NUMBER_REGEX = "([0-9]+)";
+    private static final Pattern DELAY_AMOUNT_PATTERN = Pattern.compile(NUMBER_REGEX);
+
 
     private static final String TAG = "ResponseEntityMapper";
+
+    /**
+     * Softens the output by adding a small minimum delay between each message
+     */
+    private static final long MIN_DELAY_MILLIS = 300;
 
     private final CardEntityMapper cardEntityMapper;
     private final QuickReplyEntityMapper quickReplyEntityMapper;
@@ -57,56 +70,89 @@ public class ResponseEntityMapper {
         this.quickReplyEntityMapper = quickReplyEntityMapper;
     }
 
-    public Observable<BotResponse> map(ResponseEntity responseEntity) {
+    public Observable<DelayedResponse> map(ResponseEntity responseEntity) {
+
+        Log.d(TAG, String.format("Mapping code %s -> %s ", responseEntity.getResponseCode(), responseEntity.getBotResponse()));
 
         if (responseEntity.getResponseCode() == 300) {
             return Observable.error(new EndOfConversationException());
         } else if (responseEntity.getResponseCode() == 200) {
 
-            List<String> sectionList = StringUtils.splitButKeep(responseEntity.getBotResponse(), IMG_TAG_REGEX);
 
-            ArrayList<Message> botResponseList = new ArrayList<>();
-            for (String section : sectionList) {
+            List<DelayedResponse> messageDelayPairs = new ArrayList<>();
 
-                String[] paragraphList = section.split(BREAK_PATTERN_REGEX);
+            // splits the message at the ::next:: tags
+            List<String> paragraphs = StringUtils.splitButKeep(responseEntity.getBotResponse(), BREAK_PATTERN_REGEX);
 
-                for (String paragraph : paragraphList) {
+            long runningDelay = 0;
+            Matcher matcher;
+            for (String paragraph : paragraphs) {
+                final long thisDelay = runningDelay;
 
-                    String target = paragraph.replaceAll(BB_CODE_REMOVER_REGEX, "").trim();
-                    if (Strings.isNullOrEmpty(target)) {
-                        continue;
-                    }
+                // find the pause time
+                matcher = DELAY_AMOUNT_PATTERN.matcher(paragraph);
+                if (matcher.find()) {
+                    runningDelay += Math.max(Long.parseLong(paragraph.substring(matcher.start(), matcher.end())), MIN_DELAY_MILLIS);
+                } else {
+                    runningDelay += MIN_DELAY_MILLIS;
+                }
 
-                    Message message = new Message().setPayload(target);
 
-                    if (paragraph.startsWith("[img]")) {
-                        message.setType(Message.Type.IMAGE);
-                    } else if (paragraph.startsWith("[video]")) {
-                        message.setType(Message.Type.VIDEO);
-                    } else if (paragraph.startsWith("[youtube]")) {
-                        message.setType(Message.Type.YOUTUBE);
-                    } else {
-                        message.setType(Message.Type.TEXT);
-                    }
+                String tidiedParagraph = paragraph.replaceAll(BREAK_PATTERN_REGEX, "").trim();
+                if (Strings.isNullOrEmpty(tidiedParagraph)) {
+                    continue;
+                }
 
-                    botResponseList.add(message);
 
+                // splits the message into bbcode chunks
+                for (String bbcodeChunk : StringUtils.splitButKeep(tidiedParagraph, IMG_TAG_REGEX)) {
+                    Message message = paragraphToMessage(responseEntity.getSession(), DateTime.now(), bbcodeChunk);
+                    if (message == null) continue;
+                    messageDelayPairs.add(new DelayedResponse(message, thisDelay));
                 }
             }
 
+            BotResponse cards = cardEntityMapper.map(responseEntity);
+            if (cards != null) {
+                runningDelay += MIN_DELAY_MILLIS;
+                messageDelayPairs.add(new DelayedResponse(cards, runningDelay));
+            }
 
-            return Observable.just(new BotResponse()
-                    .setQuickReplies(quickReplyEntityMapper.map(responseEntity.getQuickReplies()))
-                    .setCards(cardEntityMapper.map(responseEntity.getCards()))
-                    .setMessages(botResponseList)
-                    .setSessionId(responseEntity.getSession())
-                    .setTimeStamp(DateTime.now()));
+            BotResponse quickReplies = quickReplyEntityMapper.map(responseEntity);
+            if (quickReplies != null) {
+                messageDelayPairs.add(new DelayedResponse(quickReplies, runningDelay));
+            }
+
+            return Observable.from(messageDelayPairs);
 
 
         } else {
             return Observable.error(new UnknownError());
         }
 
+    }
+
+    @Nullable
+    private Message paragraphToMessage(String sessionId, DateTime timeStamp, String paragraph) {
+
+        //  remove bbcode from paragraph
+        String payload = paragraph.replaceAll(BB_CODE_REMOVER_REGEX, "").trim();
+        if (Strings.isNullOrEmpty(payload)) {
+            return null;
+        }
+
+        Message.Type type;
+        if (paragraph.startsWith("[img]")) {
+            type = Message.Type.IMAGE;
+        } else if (paragraph.startsWith("[video]")) {
+            type = Message.Type.VIDEO;
+        } else if (paragraph.startsWith("[youtube]")) {
+            type = Message.Type.YOUTUBE;
+        } else {
+            type = Message.Type.TEXT;
+        }
+
+        return new Message(sessionId, timeStamp, type, payload);
     }
 
 

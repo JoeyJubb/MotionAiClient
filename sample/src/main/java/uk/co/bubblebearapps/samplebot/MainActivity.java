@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements ConversationDispl
     public void setColorScheme(int colorPrimary) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             float[] hsv = new float[3];
             Color.RGBToHSV(Color.red(colorPrimary), Color.green(colorPrimary), Color.blue(colorPrimary), hsv);
             hsv[2] *= 0.8;
@@ -80,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements ConversationDispl
             window.setStatusBarColor(Color.HSVToColor(hsv));
         }
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(colorPrimary));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(colorPrimary));
+        }
     }
 }

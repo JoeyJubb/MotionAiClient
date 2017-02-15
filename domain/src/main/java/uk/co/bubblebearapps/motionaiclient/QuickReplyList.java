@@ -18,36 +18,27 @@ package uk.co.bubblebearapps.motionaiclient;
 
 import org.joda.time.DateTime;
 
+import java.util.List;
 
 /**
- * Created by joefr_000 on 23/01/2017.
+ * Created by joefr_000 on 15/02/2017.
  */
-public abstract class BotResponse {
 
+public class QuickReplyList extends BotResponse {
 
-    private final String sessionId;
-    private final DateTime timeStamp;
+    private final List<QuickReply> quickReplyList;
 
-    protected BotResponse(String sessionId, DateTime timeStamp) {
-        this.sessionId = sessionId;
-        this.timeStamp = timeStamp;
+    public QuickReplyList(String sessionId, DateTime timeStamp, List<QuickReply> quickReplyList) {
+        super(sessionId, timeStamp);
+        this.quickReplyList = quickReplyList;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    @Override
+    public void accept(Observer observer) {
+        observer.visit(this);
     }
 
-    public DateTime getTimeStamp() {
-        return timeStamp;
-    }
-
-    public abstract void accept(Observer observer);
-
-    public interface Observer {
-        void visit(Message message);
-
-        void visit(CardList cardList);
-
-        void visit(QuickReplyList quickReplyList);
+    public List<QuickReply> getQuickReplyList() {
+        return quickReplyList;
     }
 }

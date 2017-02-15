@@ -16,31 +16,35 @@
 
 package uk.co.bubblebearapps.motionaiclient;
 
+import org.joda.time.DateTime;
+
 /**
  * Created by joefr_000 on 31/01/2017.
  */
-public class Message {
+public class Message extends BotResponse {
 
-    private Type type;
+    private final Type type;
 
-    private String payload;
+    private final String payload;
+
+    public Message(String sessionId, DateTime timeStamp, Type type, String payload) {
+        super(sessionId, timeStamp);
+        this.type = type;
+        this.payload = payload;
+    }
 
     public Type getType() {
         return type;
     }
 
-    public Message setType(Type type) {
-        this.type = type;
-        return this;
-    }
 
     public String getPayload() {
         return payload;
     }
 
-    public Message setPayload(String payload) {
-        this.payload = payload;
-        return this;
+    @Override
+    public void accept(Observer observer) {
+        observer.visit(this);
     }
 
     /**

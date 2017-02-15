@@ -62,7 +62,7 @@ public class StringUtils {
         while (matcher.find()) {
             if (matcher.start() > trailingIndex) {
                 //found plain text
-                String substring = responseText.substring(trailingIndex, matcher.start() - 1);
+                String substring = responseText.substring(trailingIndex, matcher.start());
                 result.add(substring);
 
             }
@@ -73,7 +73,7 @@ public class StringUtils {
             trailingIndex = matcher.end();
         }
 
-        if (trailingIndex < responseText.length() - 1) {
+        if (trailingIndex < responseText.length()) {
             // found plain text
             String substring = responseText.substring(trailingIndex, responseText.length());
             result.add(substring);

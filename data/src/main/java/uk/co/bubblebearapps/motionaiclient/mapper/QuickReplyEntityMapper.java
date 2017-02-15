@@ -16,7 +16,7 @@
 
 package uk.co.bubblebearapps.motionaiclient.mapper;
 
-import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import uk.co.bubblebearapps.motionaiclient.QuickReply;
+import uk.co.bubblebearapps.motionaiclient.QuickReplyList;
 import uk.co.bubblebearapps.motionaiclient.entity.QuickReplyEntity;
+import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
 
 /**
  * Created by joefr_000 on 23/01/2017.
@@ -49,19 +51,18 @@ public class QuickReplyEntityMapper {
 
     }
 
-    public List<QuickReply> map(QuickReplyEntity[] quickReplies) {
 
-
-        if (quickReplies != null && quickReplies.length > 0) {
-
-            List<QuickReply> result = new ArrayList<>(quickReplies.length);
-            for (QuickReplyEntity quickReplyEntity : quickReplies) {
-                result.add(map(quickReplyEntity));
-            }
-            return result;
-        } else {
-            return Lists.newArrayList();
+    public QuickReplyList map(ResponseEntity responseEntity) {
+        if (responseEntity == null || responseEntity.getQuickReplies() == null || responseEntity.getQuickReplies().length == 0) {
+            return null;
         }
 
+
+        List<QuickReply> result = new ArrayList<>(responseEntity.getQuickReplies().length);
+        for (QuickReplyEntity quickReplyEntity : responseEntity.getQuickReplies()) {
+            result.add(map(quickReplyEntity));
+        }
+
+        return new QuickReplyList(responseEntity.getSession(), DateTime.now(), result);
     }
 }

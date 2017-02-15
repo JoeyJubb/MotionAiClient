@@ -33,7 +33,6 @@ import uk.co.bubblebearapps.samplebot.databinding.ActivityChooseBotBinding;
  */
 public class ChooseBotActivity extends AppCompatActivity {
 
-    private ActivityChooseBotBinding mViewDataBinding;
     private ChooseBotViewModel chooseBotViewModel;
     private ChooseBotModel chooseBotModel;
 
@@ -49,20 +48,20 @@ public class ChooseBotActivity extends AppCompatActivity {
         checkBotColor();
         checkModelStats();
 
-        mViewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_choose_bot);
+        ActivityChooseBotBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_choose_bot);
 
         // set initial values
-        mViewDataBinding.textApiKey.setText(chooseBotModel.getApiKey());
-        mViewDataBinding.textYoutubeKey.setText(chooseBotModel.getYouTubeKey());
-        mViewDataBinding.textId.setText(chooseBotModel.getId());
-        mViewDataBinding.textBotName.setText(chooseBotModel.getName());
-        mViewDataBinding.textBotColor.setText(chooseBotModel.getColor());
-        mViewDataBinding.cbRemember.setChecked(chooseBotModel.isRemember());
+        binding.textApiKey.setText(chooseBotModel.getApiKey());
+        binding.textYoutubeKey.setText(chooseBotModel.getYouTubeKey());
+        binding.textId.setText(chooseBotModel.getId());
+        binding.textBotName.setText(chooseBotModel.getName());
+        binding.textBotColor.setText(chooseBotModel.getColor());
+        binding.cbRemember.setChecked(chooseBotModel.isRemember());
 
 
-        mViewDataBinding.setViewModel(chooseBotViewModel);
-        mViewDataBinding.setModel(chooseBotModel);
-        mViewDataBinding.setActionHandler(this);
+        binding.setViewModel(chooseBotViewModel);
+        binding.setModel(chooseBotModel);
+        binding.setActionHandler(this);
 
 
         chooseBotModel.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {

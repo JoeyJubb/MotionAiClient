@@ -43,7 +43,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.bubblebearapps.motionaiclient.AndroidApplication;
+import uk.co.bubblebearapps.motionaiclient.Injection;
 import uk.co.bubblebearapps.motionaiclient.R;
 import uk.co.bubblebearapps.motionaiclient.base.BaseMvpFragment;
 import uk.co.bubblebearapps.motionaiclient.base.PresenterFactory;
@@ -152,7 +152,7 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
 
 
         DaggerConversationThreadComponent.builder()
-                .applicationComponent(((AndroidApplication) getActivity().getApplication()).getApplicationComponent())
+                .applicationComponent(Injection.getApplicationComponent())
                 .conversationThreadModule(new ConversationThreadModule(botInfoModel, userInfoModel))
                 .build()
                 .inject(this);
@@ -242,6 +242,14 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
     @Override
     public void setTitle(String title) {
         getActivity().setTitle(title);
+    }
+
+    @Override
+    public void swapMessage(ConversationBubble oldMessage, ConversationBubble newMessage) {
+        mAdapter.getItemList().beginBatchedUpdates();
+        mAdapter.getItemList().remove(oldMessage);
+        mAdapter.getItemList().add(newMessage);
+        mAdapter.getItemList().endBatchedUpdates();
     }
 
     @Override

@@ -21,30 +21,6 @@ allprojects {
 }
 
 ext {
-    // bintray
-    bintrayRepo = 'MotionAiClient'
-    bintrayName = 'motionaiclient'   // Has to be same as your library module name
-
-    publishedGroupId = 'uk.co.bubblebearapps'
-    libraryName = 'motionaiclient'
-    artifact = 'presentation'     // Has to be same as your library module name
-
-    libraryDescription = 'Android Library to display motion.ai bots within a fragment'
-
-    // Your github repo link
-    siteUrl = 'https://github.com/JoeyJubb/MotionAiClient'
-    gitUrl = 'https://github.com/JoeyJubb/MotionAiClient.git'
-    githubRepository = 'MotionAiClient'
-
-    libraryVersion = '0.9.0-alpha'
-
-    developerId = 'bubblebearapps'
-    developerName = 'Joseph Frostick'
-    developerEmail = 'joe@bubblebearapps.co.uk'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
 
     //Android
     androidBuildToolsVersion = "25.0.0"

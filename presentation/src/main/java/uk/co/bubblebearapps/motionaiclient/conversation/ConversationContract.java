@@ -54,6 +54,8 @@ public interface ConversationContract {
         void setColorScheme(int colorPrimary);
 
         void setTitle(String title);
+
+        void swapMessage(ConversationBubble oldMessage, ConversationBubble newMessage);
     }
 
     interface Presenter extends BasePresenter<View> {

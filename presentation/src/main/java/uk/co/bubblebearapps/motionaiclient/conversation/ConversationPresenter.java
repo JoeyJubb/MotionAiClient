@@ -31,8 +31,10 @@ import rx.Subscriber;
 import uk.co.bubblebearapps.motionaiclient.BotInfo;
 import uk.co.bubblebearapps.motionaiclient.BotResponse;
 import uk.co.bubblebearapps.motionaiclient.CardButton;
+import uk.co.bubblebearapps.motionaiclient.CardList;
+import uk.co.bubblebearapps.motionaiclient.Message;
+import uk.co.bubblebearapps.motionaiclient.QuickReplyList;
 import uk.co.bubblebearapps.motionaiclient.UserInfo;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.BotResponseModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardButtonModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.ConversationBubble;
@@ -155,14 +157,14 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     private void sendMessage(String input, final boolean showOnUi) {
 
-        // new message came in, so flush out any old quick replies!
-        clearQuickReplies();
 
         final UserInputConversationBubble sentMessage = new UserInputConversationBubble().setText(input);
         sentMessage.setLocalId(generateId()).setTimeStamp(DateTime.now()).setSecondaryOrder(0);
 
         if (showOnUi) {
-            addToMessages(sentMessage);
+            replaceQuickReply(sentMessage);
+        } else {
+            clearQuickReplies();
         }
 
         messageBot.execute(new MessageBot.RequestValue.Builder()
@@ -209,30 +211,32 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                     @Override
                     public void onNext(BotResponse botResponse) {
 
-                        BotResponseModel botResponseModel = botResponseModelMapper.map(botResponse, botInfo.getColor());
 
-                        for (MessageModel message : botResponseModel.getMessageModelList()) {
-                            addToMessages(message
-                                    .setMessageBackgroundColor(botInfo.getColor())
-                                    .setSecondaryOrder(totalCount++)
-                            );
-                            message.accept(conversationBubbleVisitor);
-                        }
+                        botResponse.accept(new BotResponse.Observer() {
+                            @Override
+                            public void visit(Message message) {
+                                MessageModel messageModel = botResponseModelMapper.map(message);
+                                addToMessages(messageModel
+                                        .setMessageBackgroundColor(botInfo.getColor())
+                                        .setSecondaryOrder(totalCount++)
+                                );
+                            }
 
-                        if (botResponseModel.getCardModelsList().getList().size() > 0) {
-                            addToMessages(
-                                    botResponseModel.getCardModelsList()
-                                            .setSecondaryOrder(totalCount++)
-                            );
-                        }
+                            @Override
+                            public void visit(CardList cardList) {
+                                addToMessages(botResponseModelMapper.map(cardList, botInfo.getColor()));
+                            }
 
-                        if (botResponseModel.getQuickReplyModelsList().getList().size() > 0) {
-                            mQuickReplies = botResponseModel.getQuickReplyModelsList();
-                        }
+                            @Override
+                            public void visit(QuickReplyList quickReplyList) {
+                                mQuickReplies = botResponseModelMapper.map(quickReplyList);
+                            }
+                        });
 
                     }
                 });
     }
+
 
     private void clearQuickReplies() {
         if (mQuickReplies != null) {
@@ -241,6 +245,25 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             }
             mMessageList.remove(mQuickReplies);
             mQuickReplies = null;
+        }
+    }
+
+
+    private void replaceQuickReply(UserInputConversationBubble sentMessage) {
+
+        if (mQuickReplies != null) {
+
+
+            mMessageList.remove(mQuickReplies);
+            mMessageList.add(sentMessage);
+            sentMessage.accept(conversationBubbleVisitor);
+
+            if (mView != null) {
+                mView.swapMessage(mQuickReplies, sentMessage);
+            }
+            mQuickReplies = null;
+        } else {
+            addToMessages(sentMessage);
         }
     }
 
@@ -257,6 +280,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     private void addToMessages(ConversationBubble conversationBubble) {
         mMessageList.add(conversationBubble);
+        conversationBubble.accept(conversationBubbleVisitor);
         if (mView != null) {
             mView.appendMessage(conversationBubble);
         }

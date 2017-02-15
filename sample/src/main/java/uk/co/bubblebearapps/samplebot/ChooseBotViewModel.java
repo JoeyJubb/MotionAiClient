@@ -29,11 +29,6 @@ public class ChooseBotViewModel extends BaseObservable {
 
     private boolean allFieldsComplete;
 
-    private String apiKey;
-    private String id;
-    private String color;
-    private String name;
-
     @Bindable
     public String getColorError() {
         return colorError;
@@ -55,23 +50,5 @@ public class ChooseBotViewModel extends BaseObservable {
     }
 
 
-    public void setApiKey(String apiKey) {
 
-        this.apiKey = apiKey;
-    }
-
-    public void setBotId(String id) {
-
-        this.id = id;
-    }
-
-    public void setBotColor(String color) {
-
-        this.color = color;
-    }
-
-    public void setBotName(String name) {
-
-        this.name = name;
-    }
 }
