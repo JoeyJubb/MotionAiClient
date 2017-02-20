@@ -77,7 +77,6 @@ dependencies {
     compile presentationDependencies.dagger
     annotationProcessor presentationDependencies.daggerCompiler
 
-
     compile presentationDependencies.butterKnife
     compile presentationDependencies.rxJava
     compile presentationDependencies.rxAndroid
@@ -95,5 +94,9 @@ dependencies {
     compile presentationDependencies.gridLayout
     compile presentationDependencies.preference
     compile presentationDependencies.contraintLayout
+
+    testCompile presentationTestDependencies.mockito
+    testCompile presentationTestDependencies.junit
+    testCompile presentationTestDependencies.hamcrest
 }
 

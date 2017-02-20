@@ -19,10 +19,8 @@ package uk.co.bubblebearapps.motionaiclient.internal.di.modules;
 import dagger.Module;
 import dagger.Provides;
 import uk.co.bubblebearapps.motionaiclient.base.PresenterFactory;
-import uk.co.bubblebearapps.motionaiclient.conversation.ConversationBubbleDecorator;
 import uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract;
 import uk.co.bubblebearapps.motionaiclient.conversation.ConversationPresenter;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.ConversationBubbleVisitor;
 import uk.co.bubblebearapps.motionaiclient.executor.PostExecutionThread;
 import uk.co.bubblebearapps.motionaiclient.executor.ThreadExecutor;
 import uk.co.bubblebearapps.motionaiclient.interactor.MessageBot;
@@ -56,27 +54,15 @@ public class ConversationThreadModule {
 
     @Provides
     @PerActivity
-    ConversationBubbleVisitor provideConversationBubbleVisitor() {
-        return new ConversationBubbleDecorator(botInfoModel);
-    }
-
-
-    @Provides
-    @PerActivity
     ConversationContract.Presenter provideConversationPresenter(MessageBot messageBot,
                                                                 BotResponseModelMapper botResponseModelMapper,
                                                                 BotInfoModelMapper botInfoModelMapper,
-                                                                UserInfoModelMapper userInfoModelMapper,
-                                                                ConversationBubbleVisitor conversationBubbleVisitor) {
-
+                                                                UserInfoModelMapper userInfoModelMapper) {
 
 
         return new ConversationPresenter(
                 messageBot,
-                botResponseModelMapper,
-                conversationBubbleVisitor,
-                botInfoModelMapper.map(botInfoModel),
-                userInfoModelMapper.map(userInfoModel)
+                botInfoModelMapper.map(botInfoModel), userInfoModelMapper.map(userInfoModel), botResponseModelMapper
         );
     }
 

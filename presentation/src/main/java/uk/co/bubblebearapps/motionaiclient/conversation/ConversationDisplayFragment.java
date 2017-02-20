@@ -78,6 +78,7 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
     private static final int REQ_RESOLVE_SERVICE_MISSING = 24;
     private static final String ARG_USER_INFO = "uk.co.bubblebearapps.motionaiclient.conversation.ARG_USER_INFO";
     private static final String ARG_BOT_INFO = "uk.co.bubblebearapps.motionaiclient.conversation.ARG_BOT_INFO";
+
     @Inject
     PresenterFactory<ConversationContract.Presenter> presenterFactory;
     private String youtubeApiKey;

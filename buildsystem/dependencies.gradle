@@ -32,6 +32,7 @@ ext {
     daggerVersion = '2.0.2'
     butterKnifeVersion = '7.0.1'
     supportLibraryVersion = '25.0.1'
+    contraintLayoutVersion = '1.0.0-beta5'
     rxJavaVersion = '1.0.14'
     rxAndroidVersion = '1.0.1'
     javaxAnnotationVersion = '1.0'
@@ -52,7 +53,7 @@ ext {
     dexmakerVersion = '1.0'
     espressoVersion = '2.0'
     testingSupportLibVersion = '0.1'
-    contraintLayoutVersion = '1.0.0-beta5'
+    hamcrestVersion = '1.3'
 
     //Development
     leakCanaryVersion = '1.3.1'
@@ -78,11 +79,9 @@ ext {
     ]
 
     presentationTestDependencies = [
-            mockito          : "org.mockito:mockito-core:${mockitoVersion}",
-            dexmaker         : "com.google.dexmaker:dexmaker:${dexmakerVersion}",
-            dexmakerMockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
-            espresso         : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
-            testingSupportLib: "com.android.support.test:testing-support-lib:${testingSupportLibVersion}",
+            junit   : "junit:junit:${jUnitVersion}",
+            mockito : "org.mockito:mockito-core:${mockitoVersion}",
+            hamcrest: "org.hamcrest:hamcrest-library:${hamcrestVersion}",
     ]
 
     domainDependencies = [

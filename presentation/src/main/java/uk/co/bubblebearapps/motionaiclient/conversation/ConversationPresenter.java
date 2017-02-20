@@ -17,7 +17,6 @@
 package uk.co.bubblebearapps.motionaiclient.conversation;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.google.common.base.Strings;
 
@@ -70,13 +69,13 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     private String inputText;
 
-    public ConversationPresenter(MessageBot messageBot, BotResponseModelMapper botResponseModelMapper, ConversationBubbleVisitor conversationBubbleVisitor, BotInfo botInfo, UserInfo userInfo) {
+    public ConversationPresenter(MessageBot messageBot, BotInfo botInfo, UserInfo userInfo, BotResponseModelMapper botResponseModelMapper) {
         this.messageBot = messageBot;
         this.botResponseModelMapper = botResponseModelMapper;
-        this.conversationBubbleVisitor = conversationBubbleVisitor;
         this.botInfo = botInfo;
         this.userInfo = userInfo;
 
+        this.conversationBubbleVisitor = new ConversationBubbleDecorator(botInfo);
         mMessageList = new ArrayList<>();
         sendMessage(RESTART_COMMAND, false);
     }
@@ -89,14 +88,14 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     private void applySendButton() {
         if (mView != null) {
-            mView.setSendButtonEnabled(!TextUtils.isEmpty(inputText));
+            mView.setSendButtonEnabled(!Strings.isNullOrEmpty(inputText));
         }
     }
 
     @Override
     public void onSendButtonPress() {
 
-        if (TextUtils.isEmpty(inputText)) {
+        if (Strings.isNullOrEmpty(inputText)) {
             applySendButton();
         } else {
             final String input = inputText;
@@ -146,7 +145,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     public void onClearButtonPress() {
         mMessageList.clear();
         inputText = null;
-        attachView(mView);
+        applyView();
         sendMessage(RESTART_COMMAND, false);
     }
 
@@ -296,6 +295,10 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     @Override
     public void attachView(@NonNull ConversationContract.View view) {
         this.mView = view;
+        applyView();
+    }
+
+    private void applyView() {
         mView.setMessages(mMessageList);
         mView.setInputText(inputText);
 

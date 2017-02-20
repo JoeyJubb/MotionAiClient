@@ -75,6 +75,6 @@ public abstract class UseCase<Q extends UseCase.RequestValue, R> {
         }
     }
 
-    interface RequestValue {
+    public interface RequestValue {
     }
 }

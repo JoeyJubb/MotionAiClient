@@ -16,6 +16,7 @@
 
 package uk.co.bubblebearapps.motionaiclient.conversation;
 
+import uk.co.bubblebearapps.motionaiclient.BotInfo;
 import uk.co.bubblebearapps.motionaiclient.Message;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModelsList;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.ConversationBubbleVisitor;
@@ -23,18 +24,17 @@ import uk.co.bubblebearapps.motionaiclient.conversation.model.EndOfConversationB
 import uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModelsList;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.UserInputConversationBubble;
-import uk.co.bubblebearapps.motionaiclient.model.BotInfoModel;
 
 /**
  * Created by joefr_000 on 09/02/2017.
  */
 public class ConversationBubbleDecorator implements ConversationBubbleVisitor {
 
-    private final BotInfoModel botInfo;
+    private final BotInfo botInfo;
     private int messageCount;
     private MessageModel mostRecentMessage;
 
-    public ConversationBubbleDecorator(BotInfoModel botInfo) {
+    public ConversationBubbleDecorator(BotInfo botInfo) {
         this.botInfo = botInfo;
         reset();
     }
