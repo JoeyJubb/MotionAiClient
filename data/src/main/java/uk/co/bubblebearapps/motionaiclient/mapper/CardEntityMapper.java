@@ -18,9 +18,6 @@ package uk.co.bubblebearapps.motionaiclient.mapper;
 
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -44,39 +41,45 @@ public class CardEntityMapper {
 
     }
 
-    public Card map(CardEntity cardEntity) {
-        Card card = new Card()
-                .setId(cardEntity.getId())
-                .setTitle(cardEntity.getTitle())
-                .setSubTitle(cardEntity.getSubTitle())
-                .setImageUrl(cardEntity.getImageUrl())
-                .setUrl(cardEntity.getUrl());
+    private Card map(CardEntity cardEntity) {
 
-        List<CardButton> cardButtonList = new ArrayList<>();
+        Card.Builder builder = new Card.Builder()
+                .setId(cardEntity.getId())
+                .setSubTitle(cardEntity.getSubTitle())
+                .setTitle(cardEntity.getTitle())
+                .setUrl(cardEntity.getUrl())
+                .setImageUrl(cardEntity.getImageUrl());
+
         if (cardEntity.getButtons() != null) {
             for (CardEntityButton cardEntityButton : cardEntity.getButtons()) {
-                cardButtonList.add(new CardButton()
+                builder.addCardButton(new CardButton.Builder()
                         .setId(cardEntityButton.getId())
-                        .setLabel(cardEntityButton.getLabel())
                         .setTarget(cardEntityButton.getTarget())
                         .setType(cardEntityButton.getType().equals("url") ? CardButton.ButtonType.URL : CardButton.ButtonType.MESSAGE)
+                        .setLabel(cardEntityButton.getLabel())
+                        .build()
                 );
             }
         }
 
-        card.setCardButtons(cardButtonList);
-        return card;
+        return builder.build();
+
     }
 
-    public CardList map(ResponseEntity responseEntity) {
+    CardList map(ResponseEntity responseEntity) {
         if (responseEntity == null || responseEntity.getCards() == null || responseEntity.getCards().length == 0) {
             return null;
         }
-        List<Card> cardsList = new ArrayList<>();
+
+        CardList.Builder builder = new CardList.Builder()
+                .setSessionId(responseEntity.getSession())
+                .setTimeStamp(DateTime.now());
+
         for (CardEntity cardEntity : responseEntity.getCards()) {
-            cardsList.add(map(cardEntity));
+            builder.addCard(map(cardEntity));
         }
-        return new CardList(responseEntity.getSession(), DateTime.now(), cardsList);
+
+        return builder.build();
 
     }
 }

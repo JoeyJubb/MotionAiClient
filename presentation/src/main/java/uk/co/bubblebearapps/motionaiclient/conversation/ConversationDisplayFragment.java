@@ -35,8 +35,6 @@ import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.google.android.youtube.player.YouTubeThumbnailLoader;
-import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.common.primitives.Ints;
 
 import java.util.List;
@@ -44,18 +42,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import uk.co.bubblebearapps.motionaiclient.Injection;
+import uk.co.bubblebearapps.motionaiclient.Message;
 import uk.co.bubblebearapps.motionaiclient.R;
 import uk.co.bubblebearapps.motionaiclient.base.BaseMvpFragment;
 import uk.co.bubblebearapps.motionaiclient.base.PresenterFactory;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.CardButtonModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModelsList;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.ConversationBubble;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.EndOfConversationBubble;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel;
-import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModelsList;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.UserInputConversationBubble;
+import uk.co.bubblebearapps.motionaiclient.conversation.model.YouTubeMessageModel;
 import uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter.CardsAdapterCallback;
 import uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter.QuickReplyAdapterCallback;
 import uk.co.bubblebearapps.motionaiclient.databinding.ConversationFragBinding;
@@ -70,7 +67,7 @@ import uk.co.bubblebearapps.motionaiclient.view.VerticalSpaceItemDecoration;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversationDisplayFragment extends BaseMvpFragment<ConversationContract.Presenter, ConversationContract.View> implements ConversationContract.ListItemActionHandler, ConversationContract.View, SortedDataBindingAdapter.AdapterCallback<ConversationBubble> {
+public class ConversationDisplayFragment extends BaseMvpFragment<ConversationContract.Presenter, ConversationContract.View> implements ConversationContract.View, SortedDataBindingAdapter.AdapterCallback<ConversationBubble> {
 
     private static final String TAG = "ConvoDisplayFragment";
     private static final String ARG_YOUTUBE_KEY = "uk.co.bubblebearapps.motionaiclient.conversation.ARG_YOUTUBE_KEY";
@@ -81,11 +78,15 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
 
     @Inject
     PresenterFactory<ConversationContract.Presenter> presenterFactory;
-    private String youtubeApiKey;
+
     private Callback callback;
     private ConversationFragBinding mViewBinding;
     private SortedDataBindingAdapter<ConversationBubble> mAdapter;
+
     private ConversationContract.Presenter mPresenter;
+
+    private String youtubeApiKey;
+
     public ConversationDisplayFragment() {
         setHasOptionsMenu(true);
     }
@@ -148,7 +149,6 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
 
         BotInfoModel botInfoModel = getArguments().getParcelable(ARG_BOT_INFO);
         UserInfoModel userInfoModel = getArguments().getParcelable(ARG_USER_INFO);
-
         youtubeApiKey = getArguments().getString(ARG_YOUTUBE_KEY);
 
 
@@ -205,7 +205,14 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
 
     @Override
     public void appendMessage(ConversationBubble message) {
-        mAdapter.getItemList().add(message);
+
+
+        if (message instanceof MessageModel && ((MessageModel) message).getType() == Message.Type.YOUTUBE) {
+            mAdapter.getItemList().add(YouTubeMessageModel.wrap((MessageModel) message, youtubeApiKey));
+        } else {
+            mAdapter.getItemList().add(message);
+        }
+
         scrollToBottom();
     }
 
@@ -254,6 +261,25 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
     }
 
     @Override
+    public void playYouTubeVideo(String youtubeId) {
+        Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+                getActivity(),
+                youtubeApiKey,
+                youtubeId,//video id
+                100,     //after this time, video will start automatically
+                true,    //autoplay or not
+                false);  //lightbox mode or not; show the video in a small box
+
+
+        if (canResolveIntent(intent)) {
+            startActivity(intent);
+        } else {
+            YouTubeInitializationResult.SERVICE_MISSING
+                    .getErrorDialog(getActivity(), REQ_RESOLVE_SERVICE_MISSING).show();
+        }
+    }
+
+    @Override
     public int getLayoutRes(ConversationBubble item) {
 
         if (item instanceof MessageModel) {
@@ -287,13 +313,11 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
     @Override
     public Object getActionHandler(@LayoutRes int viewType) {
         if (viewType == R.layout.conversation_listitem_cards) {
-            return new CardsAdapterCallback(this);
+            return new CardsAdapterCallback(mPresenter);
         } else if (viewType == R.layout.conversation_listitem_quickreplies) {
-            return new QuickReplyAdapterCallback(this);
-        } else if (viewType == R.layout.conversation_listitem_endmarker) {
-            return mPresenter;
+            return new QuickReplyAdapterCallback(mPresenter);
         } else {
-            return this;
+            return mPresenter;
         }
     }
 
@@ -318,71 +342,10 @@ public class ConversationDisplayFragment extends BaseMvpFragment<ConversationCon
         return item1.getLocalId().equals(item2.getLocalId());
     }
 
-    @Override
-    public void onQuickReplyPress(QuickReplyModel quickReply) {
-
-        mPresenter.onQuickReplyPress(quickReply);
-    }
 
     public void scrollToBottom() {
         mViewBinding.recyclerView.scrollToPosition(mViewBinding.recyclerView.getAdapter().getItemCount() - 1);
     }
-
-    @Override
-    public void onCardImagePress(CardModel cardModel) {
-        mPresenter.onCardImagePress(cardModel);
-    }
-
-    @Override
-    public void onCardButtonPress(CardButtonModel cardButtonModel) {
-        mPresenter.onCardButtonPress(cardButtonModel);
-
-
-    }
-
-    @Override
-    public void onUrlClick(String url) {
-        openUrl(url);
-    }
-
-
-    @Override
-    public void onYouTubeThumbnailTapped(String youtubeId) {
-
-        Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                getActivity(),
-                youtubeApiKey,
-                youtubeId,//video id
-                100,     //after this time, video will start automatically
-                true,    //autoplay or not
-                false);  //lightbox mode or not; show the video in a small box
-
-
-        if (canResolveIntent(intent)) {
-            startActivity(intent);
-        } else {
-            YouTubeInitializationResult.SERVICE_MISSING
-                    .getErrorDialog(getActivity(), REQ_RESOLVE_SERVICE_MISSING).show();
-        }
-
-    }
-
-    @Override
-    public void loadYouTubeVideo(YouTubeThumbnailView youTubeThumbnailView, final String youTubeId) {
-
-        youTubeThumbnailView.initialize(youtubeApiKey, new YouTubeThumbnailView.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                youTubeThumbnailLoader.setVideo(youTubeId);
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-            }
-        });
-    }
-
 
     private boolean canResolveIntent(Intent intent) {
         List<ResolveInfo> resolveInfo = getContext().getPackageManager().queryIntentActivities(intent, 0);

@@ -18,48 +18,32 @@ package uk.co.bubblebearapps.motionaiclient;
 
 public class CardButton {
 
-    private String id;
-    private String target;
-    private ButtonType type;
-    private String label;
+    private final String id;
+    private final String target;
+    private final ButtonType type;
+    private final String label;
 
-    public CardButton() {
+    private CardButton(String id, String target, ButtonType type, String label) {
+        this.id = id;
+        this.target = target;
+        this.type = type;
+        this.label = label;
     }
 
     public String getId() {
         return id;
     }
 
-    public CardButton setId(String id) {
-        this.id = id;
-        return this;
-    }
-
     public String getTarget() {
         return target;
-    }
-
-    public CardButton setTarget(String target) {
-        this.target = target;
-        return this;
     }
 
     public ButtonType getType() {
         return type;
     }
 
-    public CardButton setType(ButtonType type) {
-        this.type = type;
-        return this;
-    }
-
     public String getLabel() {
         return label;
-    }
-
-    public CardButton setLabel(String label) {
-        this.label = label;
-        return this;
     }
 
     public void visit(Visitor visitor){
@@ -77,9 +61,7 @@ public class CardButton {
     }
 
     public enum ButtonType {
-
         URL, MESSAGE
-
     }
 
     /**
@@ -89,5 +71,36 @@ public class CardButton {
         void onVisitUrl(String target);
 
         void onVisitMessage(String target);
+    }
+
+    public static class Builder {
+        private String id;
+        private String target;
+        private ButtonType type;
+        private String label;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTarget(String target) {
+            this.target = target;
+            return this;
+        }
+
+        public Builder setType(ButtonType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setLabel(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public CardButton build() {
+            return new CardButton(id, target, type, label);
+        }
     }
 }

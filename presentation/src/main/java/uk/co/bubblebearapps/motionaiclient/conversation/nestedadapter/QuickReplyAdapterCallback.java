@@ -19,6 +19,7 @@ package uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter;
 import android.support.annotation.LayoutRes;
 
 import uk.co.bubblebearapps.motionaiclient.R;
+import uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel;
 import uk.co.bubblebearapps.motionaiclient.view.DataBindingAdapter;
 
@@ -27,9 +28,9 @@ import uk.co.bubblebearapps.motionaiclient.view.DataBindingAdapter;
  */
 
 public class QuickReplyAdapterCallback implements DataBindingAdapter.AdapterCallback<QuickReplyModel> {
-    private Object actionhandler;
+    private ConversationContract.Presenter actionhandler;
 
-    public QuickReplyAdapterCallback(Object actionhandler) {
+    public QuickReplyAdapterCallback(ConversationContract.Presenter actionhandler) {
         this.actionhandler = actionhandler;
     }
 

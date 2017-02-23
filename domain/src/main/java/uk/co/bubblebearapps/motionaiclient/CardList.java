@@ -16,6 +16,8 @@
 
 package uk.co.bubblebearapps.motionaiclient;
 
+import com.google.common.collect.ImmutableList;
+
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -25,9 +27,9 @@ import java.util.List;
  */
 public class CardList extends BotResponse {
 
-    private final List<Card> cardList;
+    private final ImmutableList<Card> cardList;
 
-    public CardList(String sessionId, DateTime timeStamp, List<Card> cardList) {
+    private CardList(String sessionId, DateTime timeStamp, ImmutableList<Card> cardList) {
         super(sessionId, timeStamp);
         this.cardList = cardList;
     }
@@ -39,5 +41,30 @@ public class CardList extends BotResponse {
 
     public List<Card> getCardList() {
         return cardList;
+    }
+
+    public static class Builder {
+        private final ImmutableList.Builder<Card> cardBuilder = new ImmutableList.Builder<>();
+        private String sessionId;
+        private DateTime timeStamp;
+
+        public Builder setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
+        public Builder setTimeStamp(DateTime timeStamp) {
+            this.timeStamp = timeStamp;
+            return this;
+        }
+
+        public Builder addCard(Card card) {
+            cardBuilder.add(card);
+            return this;
+        }
+
+        public CardList build() {
+            return new CardList(sessionId, timeStamp, cardBuilder.build());
+        }
     }
 }

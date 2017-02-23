@@ -58,8 +58,6 @@ public class ConversationThreadModule {
                                                                 BotResponseModelMapper botResponseModelMapper,
                                                                 BotInfoModelMapper botInfoModelMapper,
                                                                 UserInfoModelMapper userInfoModelMapper) {
-
-
         return new ConversationPresenter(
                 messageBot,
                 botInfoModelMapper.map(botInfoModel), userInfoModelMapper.map(userInfoModel), botResponseModelMapper

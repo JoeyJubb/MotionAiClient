@@ -19,6 +19,7 @@ package uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter;
 import android.support.annotation.LayoutRes;
 
 import uk.co.bubblebearapps.motionaiclient.R;
+import uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.CardModel;
 import uk.co.bubblebearapps.motionaiclient.view.DataBindingAdapter;
 
@@ -27,9 +28,9 @@ import uk.co.bubblebearapps.motionaiclient.view.DataBindingAdapter;
  */
 
 public class CardsAdapterCallback implements DataBindingAdapter.AdapterCallback<CardModel> {
-    private Object actionHandler;
+    private ConversationContract.Presenter actionHandler;
 
-    public CardsAdapterCallback(Object actionHandler) {
+    public CardsAdapterCallback(ConversationContract.Presenter actionHandler) {
         this.actionHandler = actionHandler;
     }
 

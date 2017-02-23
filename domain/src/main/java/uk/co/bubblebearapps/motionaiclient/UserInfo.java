@@ -20,27 +20,40 @@ package uk.co.bubblebearapps.motionaiclient;
  * Created by joefr_000 on 23/01/2017.
  */
 public class UserInfo {
-    private String id;
-    private String title;
+    private final String id;
+    private final String title;
 
-    public UserInfo() {
+    private UserInfo(String id, String title) {
+        this.id = id;
+        this.title = title;
     }
 
     public String getId() {
         return id;
     }
 
-    public UserInfo setId(String id) {
-        this.id = id;
-        return this;
-    }
 
     public String getTitle() {
         return title;
     }
 
-    public UserInfo setTitle(String title) {
-        this.title = title;
-        return this;
+
+    public static class Builder {
+        private String id;
+        private String title;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public UserInfo build() {
+            return new UserInfo(id, title);
+        }
     }
 }

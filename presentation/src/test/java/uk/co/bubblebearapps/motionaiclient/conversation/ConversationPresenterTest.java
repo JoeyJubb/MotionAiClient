@@ -201,6 +201,21 @@ public class ConversationPresenterTest {
     }
 
 
+    @Test
+    public void onUrlClick() throws Exception {
+
+        reset(view);
+        conversationPresenter.onUrlClick(LOREM);
+        verify(view).openUrl(LOREM);
+    }
+
+    @Test
+    public void onYouTubeThumbnailTapped() throws Exception {
+        reset(view);
+        conversationPresenter.onYouTubeThumbnailTapped(LOREM);
+        verify(view).playYouTubeVideo(LOREM);
+    }
+
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);

@@ -25,36 +25,25 @@
 
         <variable
             name="item"
-            type="uk.co.bubblebearapps.motionaiclient.conversation.model.MessageModel" />
+            type="uk.co.bubblebearapps.motionaiclient.conversation.model.YouTubeMessageModel" />
 
         <variable
             name="actionHandler"
-            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.Presenter" />
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <com.google.android.youtube.player.YouTubeThumbnailView
+        android:id="@+id/youtubeview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/chat_bubble_side_margin_small"
+        android:layout_height="@android:dimen/thumbnail_height"
+        android:layout_marginEnd="@dimen/chat_bubble_side_margin_large"
         android:layout_marginLeft="@dimen/chat_bubble_side_margin_small"
-        android:layout_marginRight="@dimen/chat_bubble_side_margin_small"
-        android:layout_marginStart="@dimen/chat_bubble_side_margin_small">
-
-
-        <com.google.android.youtube.player.YouTubeThumbnailView
-            android:id="@+id/youtubeview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:actionHandler="@{actionHandler}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="H,16:9"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:youTubeId="@{item.target}" />
-
-    </android.support.constraint.ConstraintLayout>
+        android:layout_marginRight="@dimen/chat_bubble_side_margin_large"
+        android:layout_marginStart="@dimen/chat_bubble_side_margin_small"
+        android:onClick="@{()-> actionHandler.onYouTubeThumbnailTapped(item.target)}"
+        android:src="@android:color/black"
+        app:youTubeModel="@{item}" />
 
 
 </layout>

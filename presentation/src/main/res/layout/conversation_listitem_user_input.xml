@@ -27,7 +27,7 @@
 
         <variable
             name="actionHandler"
-            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.ListItemActionHandler" />
+            type="uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract.Presenter" />
 
     </data>
 

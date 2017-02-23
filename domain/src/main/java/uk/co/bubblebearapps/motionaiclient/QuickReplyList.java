@@ -16,9 +16,9 @@
 
 package uk.co.bubblebearapps.motionaiclient;
 
-import org.joda.time.DateTime;
+import com.google.common.collect.ImmutableList;
 
-import java.util.List;
+import org.joda.time.DateTime;
 
 /**
  * Created by joefr_000 on 15/02/2017.
@@ -26,9 +26,9 @@ import java.util.List;
 
 public class QuickReplyList extends BotResponse {
 
-    private final List<QuickReply> quickReplyList;
+    private final ImmutableList<QuickReply> quickReplyList;
 
-    public QuickReplyList(String sessionId, DateTime timeStamp, List<QuickReply> quickReplyList) {
+    private QuickReplyList(String sessionId, DateTime timeStamp, ImmutableList<QuickReply> quickReplyList) {
         super(sessionId, timeStamp);
         this.quickReplyList = quickReplyList;
     }
@@ -38,7 +38,32 @@ public class QuickReplyList extends BotResponse {
         observer.visit(this);
     }
 
-    public List<QuickReply> getQuickReplyList() {
+    public ImmutableList<QuickReply> getQuickReplyList() {
         return quickReplyList;
+    }
+
+    public static class Builder {
+        private final ImmutableList.Builder<QuickReply> quickReplyBuilder = new ImmutableList.Builder<>();
+        private String sessionId;
+        private DateTime timeStamp;
+
+        public Builder setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
+        public Builder setTimeStamp(DateTime timeStamp) {
+            this.timeStamp = timeStamp;
+            return this;
+        }
+
+        public Builder addQuickReply(QuickReply quickReply) {
+            quickReplyBuilder.add(quickReply);
+            return this;
+        }
+
+        public QuickReplyList build() {
+            return new QuickReplyList(sessionId, timeStamp, quickReplyBuilder.build());
+        }
     }
 }

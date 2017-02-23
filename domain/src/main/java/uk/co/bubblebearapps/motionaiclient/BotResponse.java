@@ -24,7 +24,6 @@ import org.joda.time.DateTime;
  */
 public abstract class BotResponse {
 
-
     private final String sessionId;
     private final DateTime timeStamp;
 

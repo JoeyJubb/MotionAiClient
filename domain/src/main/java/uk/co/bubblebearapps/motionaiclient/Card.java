@@ -16,75 +16,93 @@
 
 package uk.co.bubblebearapps.motionaiclient;
 
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Created by joefr_000 on 23/01/2017.
  */
 public class Card {
 
-    private String id;
+    private final String id;
+    private final String subTitle;
+    private final String title;
+    private final String url;
+    private final String imageUrl;
+    private final ImmutableList<CardButton> cardButtons;
 
-    private String subTitle;
-
-    private String title;
-    private String url;
-    private String imageUrl;
-    private List<CardButton> cardButtons;
+    private Card(String id, String subTitle, String title, String url, String imageUrl, ImmutableList<CardButton> cardButtons) {
+        this.id = id;
+        this.subTitle = subTitle;
+        this.title = title;
+        this.url = url;
+        this.imageUrl = imageUrl;
+        this.cardButtons = cardButtons;
+    }
 
     public String getId() {
         return id;
-    }
-
-    public Card setId(String id) {
-        this.id = id;
-        return this;
     }
 
     public String getSubTitle() {
         return subTitle;
     }
 
-    public Card setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-        return this;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public Card setTitle(String title) {
-        this.title = title;
-        return this;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public Card setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public Card setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-        return this;
-    }
-
-    public List<CardButton> getCardButtons() {
+    public ImmutableList<CardButton> getCardButtons() {
         return cardButtons;
     }
 
-    public Card setCardButtons(List<CardButton> cardButtons) {
-        this.cardButtons = cardButtons;
-        return this;
+    public static class Builder {
+        private final ImmutableList.Builder<CardButton> cardButtonBuilder = new ImmutableList.Builder<>();
+        private String id;
+        private String subTitle;
+        private String title;
+        private String url;
+        private String imageUrl;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setSubTitle(String subTitle) {
+            this.subTitle = subTitle;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder addCardButton(CardButton cardButton) {
+            this.cardButtonBuilder.add(cardButton);
+            return this;
+        }
+
+        public Card build() {
+            return new Card(id, subTitle, title, url, imageUrl, cardButtonBuilder.build());
+        }
     }
-
-
 }

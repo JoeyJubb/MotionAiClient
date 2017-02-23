@@ -27,7 +27,7 @@ public class BotInfo {
     private final String apiKey;
     private final int color;
 
-    public BotInfo(String apiKey, String id, String name, int color) {
+    private BotInfo(String apiKey, String id, String name, int color) {
         this.apiKey = apiKey;
         this.id = id;
         this.name = name;
@@ -49,5 +49,36 @@ public class BotInfo {
 
     public String getApiKey() {
         return apiKey;
+    }
+
+    public static class Builder {
+        private String apiKey;
+        private String id;
+        private String name;
+        private int color;
+
+        public Builder setApiKey(String apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        public BotInfo build() {
+            return new BotInfo(apiKey, id, name, color);
+        }
     }
 }

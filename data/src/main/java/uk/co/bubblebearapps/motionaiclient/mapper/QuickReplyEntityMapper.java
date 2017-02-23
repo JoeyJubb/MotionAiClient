@@ -18,9 +18,6 @@ package uk.co.bubblebearapps.motionaiclient.mapper;
 
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -41,28 +38,28 @@ public class QuickReplyEntityMapper {
 
     }
 
-    public QuickReply map(QuickReplyEntity quickReplyEntity) {
+    private QuickReply map(QuickReplyEntity quickReplyEntity) {
 
-        return new QuickReply()
+        return new QuickReply.Builder()
                 .setId(quickReplyEntity.getId())
-                .setTextContent(quickReplyEntity.getTitle()
-                );
-
-
+                .setTextContent(quickReplyEntity.getTitle())
+                .build();
     }
 
 
-    public QuickReplyList map(ResponseEntity responseEntity) {
+    QuickReplyList map(ResponseEntity responseEntity) {
         if (responseEntity == null || responseEntity.getQuickReplies() == null || responseEntity.getQuickReplies().length == 0) {
             return null;
         }
 
+        QuickReplyList.Builder builder = new QuickReplyList.Builder()
+                .setSessionId(responseEntity.getSession())
+                .setTimeStamp(DateTime.now());
 
-        List<QuickReply> result = new ArrayList<>(responseEntity.getQuickReplies().length);
         for (QuickReplyEntity quickReplyEntity : responseEntity.getQuickReplies()) {
-            result.add(map(quickReplyEntity));
+            builder.addQuickReply(map(quickReplyEntity));
         }
 
-        return new QuickReplyList(responseEntity.getSession(), DateTime.now(), result);
+        return builder.build();
     }
 }

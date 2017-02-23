@@ -35,9 +35,10 @@ public class UserInfoModelMapper {
 
     public UserInfo map(UserInfoModel userInfoModel) {
 
-        return new UserInfo()
+        return new UserInfo.Builder()
                 .setId(userInfoModel.getId())
-                .setTitle(userInfoModel.getTitle());
+                .setTitle(userInfoModel.getTitle())
+                .build();
 
     }
 

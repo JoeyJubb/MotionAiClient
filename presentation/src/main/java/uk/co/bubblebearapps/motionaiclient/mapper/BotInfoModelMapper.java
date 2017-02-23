@@ -35,12 +35,7 @@ public class BotInfoModelMapper {
 
     public BotInfo map(BotInfoModel botInfoModel) {
 
-        return new BotInfo(
-                botInfoModel.getApiKey(),
-                botInfoModel.getId(),
-                botInfoModel.getName(),
-                botInfoModel.getColor()
-        );
+        return new BotInfo.Builder().setApiKey(botInfoModel.getApiKey()).setId(botInfoModel.getId()).setName(botInfoModel.getName()).setColor(botInfoModel.getColor()).build();
 
     }
 

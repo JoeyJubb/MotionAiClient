@@ -27,7 +27,7 @@ public class Message extends BotResponse {
 
     private final String payload;
 
-    public Message(String sessionId, DateTime timeStamp, Type type, String payload) {
+    private Message(String sessionId, DateTime timeStamp, Type type, String payload) {
         super(sessionId, timeStamp);
         this.type = type;
         this.payload = payload;
@@ -52,5 +52,36 @@ public class Message extends BotResponse {
      */
     public enum Type {
         IMAGE, TEXT, VIDEO, UNKNOWN, YOUTUBE
+    }
+
+    public static class Builder {
+        private String sessionId;
+        private DateTime timeStamp;
+        private Type type;
+        private String payload;
+
+        public Builder setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
+        public Builder setTimeStamp(DateTime timeStamp) {
+            this.timeStamp = timeStamp;
+            return this;
+        }
+
+        public Builder setType(Type type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setPayload(String payload) {
+            this.payload = payload;
+            return this;
+        }
+
+        public Message build() {
+            return new Message(sessionId, timeStamp, type, payload);
+        }
     }
 }

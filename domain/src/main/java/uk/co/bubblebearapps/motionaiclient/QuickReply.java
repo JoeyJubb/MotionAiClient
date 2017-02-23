@@ -22,25 +22,39 @@ package uk.co.bubblebearapps.motionaiclient;
  */
 public class QuickReply {
 
-    private String textContent;
+    private final String textContent;
 
-    private String id;
+    private final String id;
+
+    private QuickReply(String id, String textContent) {
+        this.id = id;
+        this.textContent = textContent;
+    }
 
     public String getTextContent() {
         return textContent;
-    }
-
-    public QuickReply setTextContent(String textContent) {
-        this.textContent = textContent;
-        return this;
     }
 
     public String getId() {
         return id;
     }
 
-    public QuickReply setId(String id) {
-        this.id = id;
-        return this;
+    public static class Builder {
+        private String id;
+        private String textContent;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTextContent(String textContent) {
+            this.textContent = textContent;
+            return this;
+        }
+
+        public QuickReply build() {
+            return new QuickReply(id, textContent);
+        }
     }
 }

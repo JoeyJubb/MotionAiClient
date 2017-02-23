@@ -44,7 +44,7 @@ public class CardsCustomSetters {
     }
 
     @BindingAdapter(value = {"cardButtons", "cardActionHandler"})
-    public static void setCardButtons(ViewGroup viewGroup, List<CardButtonModel> cardButtonModels, final ConversationContract.ListItemActionHandler listItemActionHandler) {
+    public static void setCardButtons(ViewGroup viewGroup, List<CardButtonModel> cardButtonModels, final ConversationContract.Presenter listItemActionHandler) {
 
         recycleButtons(viewGroup);
 
@@ -63,7 +63,7 @@ public class CardsCustomSetters {
 
     }
 
-    private static void bindCardButtonModel(Button button, final ConversationContract.ListItemActionHandler listItemActionHandler, final CardButtonModel cardButtonModel) {
+    private static void bindCardButtonModel(Button button, final ConversationContract.Presenter listItemActionHandler, final CardButtonModel cardButtonModel) {
 
         button.setText(cardButtonModel.getLabel());
         button.setOnClickListener(new View.OnClickListener() {

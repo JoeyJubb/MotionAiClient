@@ -17,7 +17,6 @@
 package uk.co.bubblebearapps.motionaiclient.mapper;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.common.base.Strings;
 
@@ -25,6 +24,7 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.functions.Func1;
 import uk.co.bubblebearapps.motionaiclient.BotResponse;
 import uk.co.bubblebearapps.motionaiclient.Message;
 import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
@@ -70,16 +71,13 @@ public class ResponseEntityMapper {
         this.quickReplyEntityMapper = quickReplyEntityMapper;
     }
 
-    public Observable<DelayedResponse> map(ResponseEntity responseEntity) {
-
-        Log.d(TAG, String.format("Mapping code %s -> %s ", responseEntity.getResponseCode(), responseEntity.getBotResponse()));
+    public Observable<BotResponse> map(ResponseEntity responseEntity) {
 
         if (responseEntity.getResponseCode() == 300) {
             return Observable.error(new EndOfConversationException());
         } else if (responseEntity.getResponseCode() == 200) {
 
-
-            List<DelayedResponse> messageDelayPairs = new ArrayList<>();
+            List<ResponseDelayPair> messageDelayPairs = new ArrayList<>();
 
             // splits the message at the ::next:: tags
             List<String> paragraphs = StringUtils.splitButKeep(responseEntity.getBotResponse(), BREAK_PATTERN_REGEX);
@@ -108,22 +106,30 @@ public class ResponseEntityMapper {
                 for (String bbcodeChunk : StringUtils.splitButKeep(tidiedParagraph, IMG_TAG_REGEX)) {
                     Message message = paragraphToMessage(responseEntity.getSession(), DateTime.now(), bbcodeChunk);
                     if (message == null) continue;
-                    messageDelayPairs.add(new DelayedResponse(message, thisDelay));
+                    messageDelayPairs.add(new ResponseDelayPair(message, thisDelay));
                 }
             }
 
             BotResponse cards = cardEntityMapper.map(responseEntity);
             if (cards != null) {
                 runningDelay += MIN_DELAY_MILLIS;
-                messageDelayPairs.add(new DelayedResponse(cards, runningDelay));
+                messageDelayPairs.add(new ResponseDelayPair(cards, runningDelay));
             }
 
             BotResponse quickReplies = quickReplyEntityMapper.map(responseEntity);
             if (quickReplies != null) {
-                messageDelayPairs.add(new DelayedResponse(quickReplies, runningDelay));
+                messageDelayPairs.add(new ResponseDelayPair(quickReplies, runningDelay));
             }
 
-            return Observable.from(messageDelayPairs);
+            return Observable.from(messageDelayPairs).flatMap(new Func1<ResponseDelayPair, Observable<BotResponse>>() {
+                @Override
+                public Observable<BotResponse> call(ResponseDelayPair responseDelayPair) {
+
+                    BotResponse value = responseDelayPair.getValue();
+                    return Observable.just(value).delay(responseDelayPair.getDelay(), TimeUnit.MILLISECONDS);
+
+                }
+            });
 
 
         } else {
@@ -152,8 +158,30 @@ public class ResponseEntityMapper {
             type = Message.Type.TEXT;
         }
 
-        return new Message(sessionId, timeStamp, type, payload);
+        return new Message.Builder().setSessionId(sessionId).setTimeStamp(timeStamp).setType(type).setPayload(payload).build();
     }
 
 
+    /**
+     * Created by joefr_000 on 15/02/2017.
+     */
+
+    private static class ResponseDelayPair {
+
+        private final long delay;
+        private final BotResponse botResponse;
+
+        ResponseDelayPair(BotResponse botResponse, long delay) {
+            this.delay = delay;
+            this.botResponse = botResponse;
+        }
+
+        long getDelay() {
+            return delay;
+        }
+
+        public BotResponse getValue() {
+            return botResponse;
+        }
+    }
 }

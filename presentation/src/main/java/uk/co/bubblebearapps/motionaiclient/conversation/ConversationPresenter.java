@@ -215,6 +215,8 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                             @Override
                             public void visit(Message message) {
                                 MessageModel messageModel = botResponseModelMapper.map(message);
+
+
                                 addToMessages(messageModel
                                         .setMessageBackgroundColor(botInfo.getColor())
                                         .setSecondaryOrder(totalCount++)
@@ -251,8 +253,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     private void replaceQuickReply(UserInputConversationBubble sentMessage) {
 
         if (mQuickReplies != null) {
-
-
             mMessageList.remove(mQuickReplies);
             mMessageList.add(sentMessage);
             sentMessage.accept(conversationBubbleVisitor);
@@ -316,5 +316,24 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     @Override
     public void onDestroyed() {
         mMessageList = null;
+    }
+
+
+    @Override
+    public void onUrlClick(String url) {
+        if (mView != null) {
+            mView.openUrl(url);
+        }
+    }
+
+    @Override
+    public void onYouTubeThumbnailTapped(String youtubeId) {
+
+        if (mView != null) {
+            mView.playYouTubeVideo(youtubeId);
+        }
+
+
+
     }
 }

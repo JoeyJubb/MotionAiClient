@@ -16,17 +16,13 @@
 
 package uk.co.bubblebearapps.motionaiclient.view.customsetters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.databinding.BindingAdapter;
-import android.view.View;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 
-import java.util.List;
-
-import uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract;
+import uk.co.bubblebearapps.motionaiclient.conversation.model.YouTubeMessageModel;
 
 /**
  * Created by joefr_000 on 14/10/2016.
@@ -36,26 +32,22 @@ public class YouTubeCustomSetters {
     private YouTubeCustomSetters() {
     }
 
-    @BindingAdapter(value = {"youTubeId", "actionHandler"})
-    public static void setVideoUrl(YouTubeThumbnailView youTubeThumbnailView, final String youTubeId, final ConversationContract.ListItemActionHandler listItemActionHandler) {
+    @BindingAdapter(value = {"youTubeModel"})
+    public static void setVideoUrl(YouTubeThumbnailView youTubeThumbnailView, final YouTubeMessageModel youTubeMessageModel) {
 
 
-        listItemActionHandler.loadYouTubeVideo(youTubeThumbnailView, youTubeId);
-
-        youTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
+        youTubeThumbnailView.initialize(youTubeMessageModel.getYouTubeApiKey(), new YouTubeThumbnailView.OnInitializedListener() {
             @Override
-            public void onClick(View v) {
-                listItemActionHandler.onYouTubeThumbnailTapped(youTubeId);
+            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
+                youTubeThumbnailLoader.setVideo(youTubeMessageModel.getTarget());
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+
             }
         });
 
     }
-
-
-    private static boolean canResolveIntent(Context context, Intent intent) {
-        List<ResolveInfo> resolveInfo = context.getPackageManager().queryIntentActivities(intent, 0);
-        return resolveInfo != null && !resolveInfo.isEmpty();
-    }
-
 
 }

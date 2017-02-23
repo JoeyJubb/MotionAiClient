@@ -16,8 +16,6 @@
 
 package uk.co.bubblebearapps.motionaiclient.conversation;
 
-import com.google.android.youtube.player.YouTubeThumbnailView;
-
 import java.util.List;
 
 import uk.co.bubblebearapps.motionaiclient.base.BasePresenter;
@@ -56,6 +54,8 @@ public interface ConversationContract {
         void setTitle(String title);
 
         void swapMessage(ConversationBubble oldMessage, ConversationBubble newMessage);
+
+        void playYouTubeVideo(String youtubeId);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -64,19 +64,12 @@ public interface ConversationContract {
 
         void onSendButtonPress();
 
-        void onQuickReplyPress(QuickReplyModel quickReply);
-
-        void onCardImagePress(CardModel cardModel);
-
-        void onCardButtonPress(CardButtonModel cardButtonModel);
-
         void onClearButtonPress();
 
         void onRestartButtonPress();
-    }
 
-    interface ListItemActionHandler {
 
+        // list actions
         void onQuickReplyPress(QuickReplyModel quickReply);
 
         void onCardImagePress(CardModel cardModel);
@@ -86,8 +79,7 @@ public interface ConversationContract {
         void onUrlClick(String url);
 
         void onYouTubeThumbnailTapped(String youtubeId);
-
-        void loadYouTubeVideo(YouTubeThumbnailView youTubeThumbnailView, String youTubeId);
     }
+
 
 }
