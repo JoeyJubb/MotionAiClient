@@ -31,6 +31,7 @@ public class QuickReplyEntity {
 
     @SerializedName("payload")
     private Object payload;
+
     @SerializedName("content_type")
     /**
      * Can be one of "text"

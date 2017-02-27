@@ -72,6 +72,8 @@ public class BotResponseModelMapper {
 
     public QuickReplyModel map(QuickReply quickReply) {
         return new QuickReplyModel()
+                .setPayload(quickReply.getPayload())
+                .setQuickReplyType(quickReply.getType())
                 .setId(quickReply.getId())
                 .setTextContent(quickReply.getTextContent());
     }

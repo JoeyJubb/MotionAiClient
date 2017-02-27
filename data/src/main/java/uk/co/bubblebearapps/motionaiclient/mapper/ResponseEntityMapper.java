@@ -46,7 +46,7 @@ import uk.co.bubblebearapps.motionaiclient.util.StringUtils;
 @Singleton
 public class ResponseEntityMapper {
 
-    private static final String IMG_TAG_REGEX = "\\[(img|video|youtube)\\]([\\s\\S]+?)\\[/\\1\\]";
+    private static final String TAG_REGEX = "\\[(img|video|youtube)\\]([\\s\\S]+?)\\[/\\1\\]";
     private static final String BB_CODE_REMOVER_REGEX = "(\\[/?(img|video|youtube)])";
     private static final String BREAK_PATTERN_REGEX = "(::next(-[0-9]+)?::)";
 
@@ -103,7 +103,7 @@ public class ResponseEntityMapper {
 
 
                 // splits the message into bbcode chunks
-                for (String bbcodeChunk : StringUtils.splitButKeep(tidiedParagraph, IMG_TAG_REGEX)) {
+                for (String bbcodeChunk : StringUtils.splitButKeep(tidiedParagraph, TAG_REGEX)) {
                     Message message = paragraphToMessage(responseEntity.getSession(), DateTime.now(), bbcodeChunk);
                     if (message == null) continue;
                     messageDelayPairs.add(new ResponseDelayPair(message, thisDelay));

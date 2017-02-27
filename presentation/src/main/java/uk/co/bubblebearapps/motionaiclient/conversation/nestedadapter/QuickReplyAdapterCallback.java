@@ -18,6 +18,7 @@ package uk.co.bubblebearapps.motionaiclient.conversation.nestedadapter;
 
 import android.support.annotation.LayoutRes;
 
+import uk.co.bubblebearapps.motionaiclient.QuickReply;
 import uk.co.bubblebearapps.motionaiclient.R;
 import uk.co.bubblebearapps.motionaiclient.conversation.ConversationContract;
 import uk.co.bubblebearapps.motionaiclient.conversation.model.QuickReplyModel;
@@ -36,7 +37,14 @@ public class QuickReplyAdapterCallback implements DataBindingAdapter.AdapterCall
 
     @Override
     public int getLayoutRes(QuickReplyModel item) {
-        return R.layout.conversation_listitem_quick_reply;
+
+        if (item.getQuickReplyType() == QuickReply.QuickReplyType.URL) {
+            return R.layout.conversation_listitem_quick_reply_url;
+
+        } else {
+
+            return R.layout.conversation_listitem_quick_reply;
+        }
     }
 
     @Override

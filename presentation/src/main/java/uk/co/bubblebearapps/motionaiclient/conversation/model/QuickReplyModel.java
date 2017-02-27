@@ -16,6 +16,8 @@
 
 package uk.co.bubblebearapps.motionaiclient.conversation.model;
 
+import uk.co.bubblebearapps.motionaiclient.QuickReply;
+
 /**
  * Created by joefr_000 on 23/01/2017.
  */
@@ -24,6 +26,10 @@ public class QuickReplyModel {
     private String textContent;
 
     private String id;
+
+    private QuickReply.QuickReplyType quickReplyType;
+
+    private String payload;
 
 
     public String getTextContent() {
@@ -44,4 +50,21 @@ public class QuickReplyModel {
         return this;
     }
 
+    public QuickReply.QuickReplyType getQuickReplyType() {
+        return quickReplyType;
+    }
+
+    public QuickReplyModel setQuickReplyType(QuickReply.QuickReplyType quickReplyType) {
+        this.quickReplyType = quickReplyType;
+        return this;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public QuickReplyModel setPayload(String payload) {
+        this.payload = payload;
+        return this;
+    }
 }

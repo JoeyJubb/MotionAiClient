@@ -18,6 +18,9 @@ package uk.co.bubblebearapps.motionaiclient.mapper;
 
 import org.joda.time.DateTime;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -32,6 +35,9 @@ import uk.co.bubblebearapps.motionaiclient.entity.ResponseEntity;
 @Singleton
 public class QuickReplyEntityMapper {
 
+    private static final String URL_MARKDOWN_REGEX = "\\[([^\\]]+)\\]\\(([^)]+)\\)";
+    private static final Pattern URL_MARKDOWN_PATTERN = Pattern.compile(URL_MARKDOWN_REGEX);
+
 
     @Inject
     public QuickReplyEntityMapper() {
@@ -40,10 +46,25 @@ public class QuickReplyEntityMapper {
 
     private QuickReply map(QuickReplyEntity quickReplyEntity) {
 
-        return new QuickReply.Builder()
-                .setId(quickReplyEntity.getId())
-                .setTextContent(quickReplyEntity.getTitle())
-                .build();
+
+        String title = quickReplyEntity.getTitle();
+
+        QuickReply.Builder builder = new QuickReply.Builder()
+                .setId(quickReplyEntity.getId());
+
+        Matcher matcher = URL_MARKDOWN_PATTERN.matcher(title);
+        if (matcher.find()) {
+            builder.setType(QuickReply.QuickReplyType.URL);
+            builder.setTextContent(matcher.group(2));
+            builder.setPayload(matcher.group(1));
+        } else {
+            builder.setType(QuickReply.QuickReplyType.TEXT);
+            builder.setTextContent(quickReplyEntity.getTitle());
+        }
+
+        return builder.build();
+
+
     }
 
 

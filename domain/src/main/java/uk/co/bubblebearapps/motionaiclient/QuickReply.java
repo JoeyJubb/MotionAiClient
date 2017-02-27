@@ -22,13 +22,19 @@ package uk.co.bubblebearapps.motionaiclient;
  */
 public class QuickReply {
 
+
     private final String textContent;
 
     private final String id;
 
-    private QuickReply(String id, String textContent) {
+    private final QuickReplyType type;
+    private final String payload;
+
+    private QuickReply(String id, String textContent, QuickReplyType type, String payload) {
         this.id = id;
         this.textContent = textContent;
+        this.type = type;
+        this.payload = payload;
     }
 
     public String getTextContent() {
@@ -39,9 +45,23 @@ public class QuickReply {
         return id;
     }
 
+    public String getPayload() {
+        return payload;
+    }
+
+    public QuickReplyType getType() {
+        return type;
+    }
+
+    public enum QuickReplyType {
+        TEXT, URL, PHONE, CALENDAR, LOCATION
+    }
+
     public static class Builder {
         private String id;
         private String textContent;
+        private QuickReplyType type;
+        private String payload;
 
         public Builder setId(String id) {
             this.id = id;
@@ -54,7 +74,16 @@ public class QuickReply {
         }
 
         public QuickReply build() {
-            return new QuickReply(id, textContent);
+            return new QuickReply(id, textContent, type, payload);
+        }
+
+        public Builder setType(QuickReplyType type) {
+            this.type = type;
+            return this;
+        }
+
+        public void setPayload(String payload) {
+            this.payload = payload;
         }
     }
 }
